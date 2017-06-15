@@ -60,14 +60,15 @@ export default class ImagePickerExample extends React.Component {
           ImageStore.getBase64ForTag(imageURI, (base64Data) => {
             this.setState({ pictureBase64: base64Data });
 
-            let testBase64 = this.state.pictureBase64
-            app.models.predict(Clarifai.FOOD_MODEL, { base64: this.state.pictureBase64 })
+            let base64 = this.state.pictureBase64
+            app.models.predict(Clarifai.FOOD_MODEL, { base64: base64 })
             .then((res) => {
-              // console.log('Clarifai result = ', res);
+              console.log('Clarifai result = ', res);
               let tags = '';
-              for (let i = 0; i<res.outputs[0].data.concepts.length; i++) {
+              for (let i = 0; i < res.outputs[0].data.concepts.length; i++) {
                 tags += res.outputs[0].data.concepts[i].name + ' ';
               }
+              console.log('TAGS', tags)
               this.setState({ tagText: tags });
             },
             (error)=>{
