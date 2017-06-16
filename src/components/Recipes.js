@@ -19,10 +19,6 @@ class Recipes extends Component {
       url: url
     }, {
       dialogTitle: 'Sharing options: ',
-      // excludedActivityTypes: [
-      //   'com.apple.UIKit.activity.PostToTwitter',
-      //   'com.apple.uikit.activity.mail'
-      // ],
       tintColor: 'green'
     })
     .catch(err => console.log(err))
@@ -49,7 +45,9 @@ class Recipes extends Component {
           : null }
 
           <Text>Here are the ingredients I see: { tags.join(', ') }</Text>
+          <Text>Here are your dietary preferences:</Text>
 
+          {/*{ Show something if there are no recipes :( }*/}
           {
             recipeList.map((recipe, idx) => (
               <View key={ idx } >

@@ -35,9 +35,14 @@ const reducer = (state = initialCategoryState, action) => {
 
 // https://api.edamam.com/search?q=pizza+cheese&app_id=092ad3fe&app_key=3cd9d2735f133ac251b9f78c1df1cf0b&from=0&to=3&health=vegetarian
 
-export const getRecipesList = (tags) => dispatch => {
+export const getRecipesList = (tags, preferences = []) => dispatch => {
   let queries = tags.join('+')
-  let edamamApiPath = `https://api.edamam.com/search?q=${queries}&app_id=${edamamId}&app_key=${edamamKey}&from0&to=3`
+  let health = preferences.length ? `health=${preferences.join('&health=')}` : ''
+  let edamamApiPath = `https://api.edamam.com/search?q=${queries}&app_id=${edamamId}&app_key=${edamamKey}&from0&to=3&${health}`
+
+  console.log('edamamApiPath', edamamApiPath)
+
+  // Set preferences in state here!
 
   axios.get(edamamApiPath)
   .then(res => {
