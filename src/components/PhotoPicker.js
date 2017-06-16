@@ -2,15 +2,19 @@ import React from 'react'
 import { ImagePicker } from 'expo'
 import { Button, Image, View, Text, ImageEditor, ImageStore } from 'react-native'
 import { connect } from 'react-redux'
+import {
+  StackNavigator,
+} from 'react-navigation'
 
 import styles from '../style'
-import app from '../clarifai'
+import { clarifaiApp } from '../secrets'
 import { setPhotoUrl, setPhotoBase64, setPhotoTags } from '../redux/photo'
+import RecipesScreen from './Recipes'
 
 /* -----------------    COMPONENT    ------------------ */
 
-const Picker = ({ photo, setPhoto, setBase64, setTags }) => {
-  let { photoUrl, photoBase64, tags } = photo
+const PhotoPicker = ({ photo, setPhoto, setBase64, setTags, navigation }) => {
+  let { navigate } = navigation
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -32,26 +36,27 @@ const Picker = ({ photo, setPhoto, setBase64, setTags }) => {
         ImageEditor.cropImage(fixedPhotoUrl, imageSize, (imageUri) => {
           ImageStore.getBase64ForTag(imageUri, (base64Data) => {
             setBase64(base64Data)
-            getClarifaiTags(base64Data)
+            setClarifaiTagsAndRecipes(base64Data)
             ImageStore.removeImageForTag(imageUri);
           }, (reason) => console.log('ERROR 3: ', reason) )
         }, (reason) => console.log('ERROR 2: ', reason) )
       }, (reason) => console.log('ERROR 1: ', reason))
     }
-  };
+  }
 
-  const getClarifaiTags = (base64) => {
-    app.models.predict(Clarifai.FOOD_MODEL, { base64: base64 })
+  const setClarifaiTagsAndRecipes = (base64) => {
+    clarifaiApp.models.predict(Clarifai.FOOD_MODEL, { base64: base64 })
     .then((res) => {
       // console.log('Clarifai result = ', res);
       let tags = []
       const concepts = res.outputs[0].data.concepts
-      concepts.forEach(concept => {
-        tags.push(concept.name)
-      })
+      for (let i = 0; i < 3; i++) {
+        tags.push(concepts[i].name)
+      }
       setTags(tags)
+      navigate('Recipes')
     }, (error) => {
-      console.log(error);
+      console.log('ERROR getting clarifai tags: ', error);
     })
   }
 
@@ -62,16 +67,13 @@ const Picker = ({ photo, setPhoto, setBase64, setTags }) => {
         onPress={ pickImage }
       />
 
-      { photoUrl
-      ? <Image source={{ uri: photoUrl }} style={ styles.image } />
-      : <Text>Photo will be shown here</Text> }
-
-      <Text>{ tags.join(' ') }</Text>
+      {/* Add I'm feeling lucky option to select */}
+      {/* Add dietary restrictions */}
     </View>
   )
 }
 
-/* -----------------    CONTAINER    ------------------ */
+/* -----------------   REACT-REDUX   ------------------ */
 
 const mapState = ({ photo }) => ({ photo })
 const mapDispatch = dispatch => ({
@@ -86,4 +88,13 @@ const mapDispatch = dispatch => ({
   }
 })
 
-export default connect(mapState, mapDispatch)(Picker)
+/* -----------------    NAVIGATOR    ------------------ */
+
+const PhotoPickerScreen = connect(mapState, mapDispatch)(PhotoPicker)
+
+const App = StackNavigator({
+  Home: { screen: PhotoPickerScreen },
+  Recipes: { screen: RecipesScreen },
+})
+
+export default connect()(App)

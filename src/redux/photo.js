@@ -1,9 +1,10 @@
+import { getRecipesList } from './recipes'
+
 /* -----------------    ACTIONS     ------------------ */
 
 const SET_URL = 'SET_URL'
 const SET_BASE64 = 'SET_BASE64'
 const SET_TAGS = 'SET_TAGS'
-// const UPDATE = 'UPDATE_QUANTITY'
 
 /* ------------   ACTION CREATORS     ------------------ */
 
@@ -54,6 +55,7 @@ export const setPhotoBase64 = (base64) => dispatch => {
 
 export const setPhotoTags = (tags) => dispatch => {
   dispatch(setTags(tags))
+  dispatch(getRecipesList(tags))
 }
 
 export default reducer
