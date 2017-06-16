@@ -9,7 +9,7 @@ import app from './src/clarifai'
 export default class ImagePickerExample extends React.Component {
   state = {
     image: null,
-    tagText: '',
+    tags: [],
     pictureBase64: ''
   };
   // contructor(props) {
@@ -31,7 +31,7 @@ export default class ImagePickerExample extends React.Component {
         {image &&
           <Image source={{ uri: image }} style={ styles.image } />}
 
-        <Text>{this.state.tagText}</Text>
+        <Text>{this.state.tags.join(' ')}</Text>
       </View>
     );
   }
@@ -41,8 +41,6 @@ export default class ImagePickerExample extends React.Component {
       allowsEditing: true,
       aspect: [4, 3],
     });
-
-    console.log(result);
 
     if (!result.cancelled) {
       this.setState({ image: result.uri.replace('file://', '') });
@@ -63,13 +61,11 @@ export default class ImagePickerExample extends React.Component {
             let base64 = this.state.pictureBase64
             app.models.predict(Clarifai.FOOD_MODEL, { base64: base64 })
             .then((res) => {
-              console.log('Clarifai result = ', res);
-              let tags = '';
+              let tags = [];
               for (let i = 0; i < res.outputs[0].data.concepts.length; i++) {
-                tags += res.outputs[0].data.concepts[i].name + ' ';
+                tags.push(res.outputs[0].data.concepts[i].name + ' ')
               }
-              console.log('TAGS', tags)
-              this.setState({ tagText: tags });
+              this.setState({ tags: tags });
             },
             (error)=>{
               console.log(error);
