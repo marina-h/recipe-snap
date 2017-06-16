@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Image, View, Text, WebView, Linking } from 'react-native'
+import { Button, Image, View, Text, ScrollView, Linking } from 'react-native'
 import { connect } from 'react-redux'
 
 import styles from '../style'
@@ -13,18 +13,27 @@ const Recipes = ({ photo, recipes }) => {
 
   return (
     <View style={ styles.container }>
+      <ScrollView>
 
-      {/* Maybe add a way to select ingredients from tags list */}
+        {/* Maybe add a way to select ingredients from tags list */}
 
-      { photoUrl
-      ? <Image source={{ uri: photoUrl }} style={ styles.image } />
-      : null }
+        { photoUrl
+        ? <Image source={{ uri: photoUrl }} style={ styles.image } />
+        : null }
 
-      <Text>Here are the ingredients I see: { tags.join(' ') }</Text>
+        <Text>Here are the ingredients I see: { tags.join(' ') }</Text>
 
-      <Text>Recipes: { recipeList.map(entry => entry.label) }</Text>
+        <Text>Recipes: { recipeList.map(entry => entry.label) }</Text>
 
-
+        {/*{
+          recipeList.map((recipe, idx) => (
+            <View key={ recipe.uri.concat(idx) } >
+              <Image source={{ uri: recipe.image }} style={ styles.image } />
+              <Text>{ recipe.label }</Text>
+            </View>
+          ))
+        }*/}
+      </ScrollView>
     </View>
   )
 }
