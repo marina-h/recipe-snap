@@ -14,7 +14,7 @@ import RecipiesScreen from './Recipies'
 /* -----------------    COMPONENT    ------------------ */
 
 const PhotoPicker = ({ photo, setPhoto, setBase64, setTags, navigation }) => {
-  let { photoUrl, photoBase64, tags } = photo
+  let { navigate } = navigation
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -54,12 +54,11 @@ const PhotoPicker = ({ photo, setPhoto, setBase64, setTags, navigation }) => {
         tags.push(concepts[i].name)
       }
       setTags(tags)
+      navigate('Recipies')
     }, (error) => {
       console.log('ERROR getting clarifai tags: ', error);
     })
   }
-
-  console.log('this.props', navigation)
 
   return (
     <View style={ styles.container }>
@@ -68,16 +67,10 @@ const PhotoPicker = ({ photo, setPhoto, setBase64, setTags, navigation }) => {
         onPress={ pickImage }
       />
 
-      { photoUrl
-      ? <Image source={{ uri: photoUrl }} style={ styles.image } />
-      : null }
-
-      <Text>{ tags.join(' ') }</Text>
-
-      <Button
+      {/*<Button
         title="Go to Recipies screen"
         onPress={ () => navigation.navigate('Recipies') }
-      />
+      />*/}
     </View>
   )
 }

@@ -1,34 +1,36 @@
 import React from 'react'
-// import { ImagePicker } from 'expo'
-import { Button, Image, View, Text, ImageEditor, ImageStore } from 'react-native'
+import { Button, Image, View, Text } from 'react-native'
 import { connect } from 'react-redux'
-import {
-  StackNavigator,
-} from 'react-navigation'
-
 
 import styles from '../style'
 // import { setPhotoUrl, setPhotoBase64, setPhotoTags } from '../redux/photo'
-// import RecipiesScreen from './Recipies'
 
 /* -----------------    COMPONENT    ------------------ */
 
-const Recipies = () => {
+const Recipies = ({ photo }) => {
+  let { photoUrl, tags } = photo
+
   return (
     <View style={ styles.container }>
-      <Text>Recipies will be here</Text>
+
+      { photoUrl
+      ? <Image source={{ uri: photoUrl }} style={ styles.image } />
+      : null }
+
+      <Text>{ tags.join(' ') }</Text>
+
     </View>
   )
 }
 
 /* -----------------   REACT-REDUX   ------------------ */
 
-const mapState = () => {}
+const mapState = ({ photo }) => ({ photo })
 const mapDispatch = dispatch => ({
 })
 
 /* -----------------    NAVIGATOR    ------------------ */
 
-const RecipiesScreen = connect()(Recipies)
+const RecipiesScreen = connect(mapState, mapDispatch)(Recipies)
 
 export default RecipiesScreen
