@@ -23,16 +23,15 @@ const Recipes = ({ photo, recipes }) => {
 
         <Text>Here are the ingredients I see: { tags.join(' ') }</Text>
 
-        <Text>Recipes: { recipeList.map(entry => entry.label) }</Text>
-
-        {/*{
+        {
           recipeList.map((recipe, idx) => (
-            <View key={ recipe.uri.concat(idx) } >
+            <View key={ idx } >
               <Image source={{ uri: recipe.image }} style={ styles.image } />
               <Text>{ recipe.label }</Text>
             </View>
           ))
-        }*/}
+        }
+
       </ScrollView>
     </View>
   )
