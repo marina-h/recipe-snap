@@ -10,48 +10,46 @@ import { setPhotoUrl, setPhotoBase64, setPhotoTags } from '../redux/photo'
 const Picker = ({ photo, setPhoto, setBase64, setTags }) => {
   let { photoUrl, photoBase64, tags } = photo
 
-  function pickImage() { console.log('HIHI') }
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+    })
 
-  // async function pickImage() {
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //   });
+    if (!result.cancelled) {
+      setPhoto(result.uri.replace('file://', ''))
 
-  //   if (!result.cancelled) {
-  //     setPhoto(result.uri.replace('file://', ''))
+      // Image.getSize(photoUrl, (width, height) => {
+      //   let imageSize = {
+      //     size: { width, height },
+      //     offset: { x: 0, y: 0 }
+      //   }
 
-  //     Image.getSize(photoUrl, (width, height) => {
-  //       let imageSize = {
-  //         size: { width, height },
-  //         offset: { x: 0, y: 0 }
-  //       }
+      //   // https://github.com/facebook/react-native/issues/12114
+      //   ImageEditor.cropImage(photoUrl, imageSize, (imageURI) => {
+      //     ImageStore.getBase64ForTag(imageURI, (base64Data) => {
+      //       setBase64(base64Data);
 
-  //       // https://github.com/facebook/react-native/issues/12114
-  //       ImageEditor.cropImage(photoUrl, imageSize, (imageURI) => {
-  //         ImageStore.getBase64ForTag(imageURI, (base64Data) => {
-  //           setBase64(base64Data);
+      //       let testBase64 = this.state.pictureBase64
+      //       app.models.predict(Clarifai.FOOD_MODEL, { base64: photoBase64 })
+      //       .then((res) => {
+      //         // console.log('Clarifai result = ', res);
+      //         let tags = [];
+      //         for (let i = 0; i<res.outputs[0].data.concepts.length; i++) {
+      //           tags.push(res.outputs[0].data.concepts[i].name + ' ')
+      //         }
+      //         setTags(tags)
+      //       },
+      //       (error)=>{
+      //         console.log(error);
+      //       });
 
-  //           let testBase64 = this.state.pictureBase64
-  //           app.models.predict(Clarifai.FOOD_MODEL, { base64: photoBase64 })
-  //           .then((res) => {
-  //             // console.log('Clarifai result = ', res);
-  //             let tags = [];
-  //             for (let i = 0; i<res.outputs[0].data.concepts.length; i++) {
-  //               tags.push(res.outputs[0].data.concepts[i].name + ' ')
-  //             }
-  //             setTags(tags)
-  //           },
-  //           (error)=>{
-  //             console.log(error);
-  //           });
-
-  //           ImageStore.removeImageForTag(imageURI);
-  //         }, (reason) => console.log(reason) )
-  //       }, (reason) => console.log(reason) )
-  //     }, (reason) => console.log(reason))
-  //   }
-  // };
+      //       ImageStore.removeImageForTag(imageURI);
+      //     }, (reason) => console.log(reason) )
+      //   }, (reason) => console.log(reason) )
+      // }, (reason) => console.log(reason))
+    }
+  };
 
   return (
     <View style={ styles.container }>
@@ -59,8 +57,10 @@ const Picker = ({ photo, setPhoto, setBase64, setTags }) => {
         title="Pick an image from camera roll"
         onPress={ pickImage }
       />
-      {image &&
-        <Image source={{ uri: photoUrl }} style={ styles.image } />}
+
+      { photoUrl
+      ? <Image source={{ uri: photoUrl }} style={ styles.image } />
+      : <Text>Photo will be shown here</Text> }
 
       <Text>{ tags.join(' ') }</Text>
     </View>
@@ -72,7 +72,7 @@ const Picker = ({ photo, setPhoto, setBase64, setTags }) => {
 
 const mapState = ({ photo }) => ({ photo })
 const mapDispatch = dispatch => ({
-  setPhotoUrl: (photo) => {
+  setPhoto: (photo) => {
     dispatch(setPhotoUrl(photo))
   },
   setBase64: (base64) => {
