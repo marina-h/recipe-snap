@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 /* -----------------    ACTIONS     ------------------ */
 
 // const GET_RECIPIES = 'GET_RECIPIES'

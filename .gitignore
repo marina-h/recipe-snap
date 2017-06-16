@@ -1,4 +1,4 @@
 node_modules/
 .expo/
 npm-debug.*
-src/clarifai.js
+src/secrets.js

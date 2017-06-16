@@ -4,7 +4,7 @@ import { Button, Image, View, Text, ImageEditor, ImageStore } from 'react-native
 import { connect } from 'react-redux'
 
 import styles from '../style'
-import app from '../clarifai'
+import { clarifaiApp } from '../secrets'
 import { setPhotoUrl, setPhotoBase64, setPhotoTags } from '../redux/photo'
 
 /* -----------------    COMPONENT    ------------------ */
@@ -38,20 +38,20 @@ const Picker = ({ photo, setPhoto, setBase64, setTags }) => {
         }, (reason) => console.log('ERROR 2: ', reason) )
       }, (reason) => console.log('ERROR 1: ', reason))
     }
-  };
+  }
 
   const getClarifaiTags = (base64) => {
-    app.models.predict(Clarifai.FOOD_MODEL, { base64: base64 })
+    clarifaiApp.models.predict(Clarifai.FOOD_MODEL, { base64: base64 })
     .then((res) => {
       // console.log('Clarifai result = ', res);
       let tags = []
       const concepts = res.outputs[0].data.concepts
-      concepts.forEach(concept => {
-        tags.push(concept.name)
-      })
+      for (let i = 0; i < 3; i++) {
+        tags.push(concepts[i].name)
+      }
       setTags(tags)
     }, (error) => {
-      console.log(error);
+      console.log('ERROR getting clarifai tags: ', error);
     })
   }
 
@@ -64,7 +64,7 @@ const Picker = ({ photo, setPhoto, setBase64, setTags }) => {
 
       { photoUrl
       ? <Image source={{ uri: photoUrl }} style={ styles.image } />
-      : <Text>Photo will be shown here</Text> }
+      : null }
 
       <Text>{ tags.join(' ') }</Text>
     </View>
