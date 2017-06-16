@@ -11,8 +11,13 @@ const Recipes = ({ photo, recipes }) => {
   let { photoUrl, tags } = photo
   let { recipeList } = recipes
 
+  const visitRecipeUrl = (url) => {
+    Linking.openURL(url)
+    .catch(err => console.error('Error: ', err))
+  }
+
   return (
-    <View style={ styles.container }>
+    <View>
       <ScrollView>
 
         {/* Maybe add a way to select ingredients from tags list */}
@@ -28,6 +33,9 @@ const Recipes = ({ photo, recipes }) => {
             <View key={ idx } >
               <Image source={{ uri: recipe.image }} style={ styles.image } />
               <Text>{ recipe.label }</Text>
+              <Button
+                title="Link to original website"
+                onPress={ () => visitRecipeUrl(recipe.url) } />
             </View>
           ))
         }
