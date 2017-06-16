@@ -9,7 +9,7 @@ const SET_TAGS = 'SET_TAGS'
 
 const setUrl = url => ({ type: SET_URL, url })
 const setBase64 = base64 => ({ type: SET_BASE64, base64 })
-const setTags = tags => ({ type: SET_URL, tags })
+const setTags = tags => ({ type: SET_TAGS, tags })
 
 /* ------------       REDUCERS     ------------------ */
 
@@ -27,12 +27,12 @@ const reducer = (state = initialCategoryState, action) => {
     newState.photoUrl = action.url
     break
 
-  case SET_TAGS:
-    newState.tags = action.tags
-    break
-
   case SET_BASE64:
     newState.photoBase64 = action.base64
+    break
+
+  case SET_TAGS:
+    newState.tags = action.tags
     break
 
   default:

@@ -27,27 +27,26 @@ const Picker = ({ photo, setPhoto, setBase64, setTags }) => {
         }
 
         // https://github.com/facebook/react-native/issues/12114
-        // ImageEditor.cropImage(photoUrl, imageSize, (imageURI) => {
-        //   ImageStore.getBase64ForTag(imageURI, (base64Data) => {
-        //     setBase64(base64Data);
+        ImageEditor.cropImage(fixedPhotoUrl, imageSize, (imageUri) => {
+          ImageStore.getBase64ForTag(imageUri, (base64Data) => {
+            setBase64(base64Data)
 
-        //     let testBase64 = this.state.pictureBase64
-        //     app.models.predict(Clarifai.FOOD_MODEL, { base64: photoBase64 })
-        //     .then((res) => {
-        //       // console.log('Clarifai result = ', res);
-        //       let tags = [];
-        //       for (let i = 0; i<res.outputs[0].data.concepts.length; i++) {
-        //         tags.push(res.outputs[0].data.concepts[i].name + ' ')
-        //       }
-        //       setTags(tags)
-        //     },
-        //     (error)=>{
-        //       console.log(error);
-        //     });
+            app.models.predict(Clarifai.FOOD_MODEL, { base64: base64Data })
+            .then((res) => {
+              console.log('Clarifai result = ', res);
+              let tags = [];
+              for (let i = 0; i < res.outputs[0].data.concepts.length; i++) {
+                tags.push(res.outputs[0].data.concepts[i].name)
+              }
+              setTags(tags)
+            },
+            (error)=>{
+              console.log(error);
+            });
 
-        //     ImageStore.removeImageForTag(imageURI);
-        //   }, (reason) => console.log('ERROR 3: 'reason) )
-        // }, (reason) => console.log('ERROR 2: 'reason) )
+            ImageStore.removeImageForTag(imageUri);
+          }, (reason) => console.log('ERROR 3: ', reason) )
+        }, (reason) => console.log('ERROR 2: ', reason) )
       }, (reason) => console.log('ERROR 1: ', reason))
     }
   };
