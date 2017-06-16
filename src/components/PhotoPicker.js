@@ -6,14 +6,14 @@ import {
   StackNavigator,
 } from 'react-navigation'
 
-
 import styles from '../style'
 import { clarifaiApp } from '../secrets'
 import { setPhotoUrl, setPhotoBase64, setPhotoTags } from '../redux/photo'
+import RecipiesScreen from './Recipies'
 
 /* -----------------    COMPONENT    ------------------ */
 
-const PhotoPicker = ({ photo, setPhoto, setBase64, setTags }) => {
+const PhotoPicker = ({ photo, setPhoto, setBase64, setTags, navigation }) => {
   let { photoUrl, photoBase64, tags } = photo
 
   const pickImage = async () => {
@@ -59,6 +59,8 @@ const PhotoPicker = ({ photo, setPhoto, setBase64, setTags }) => {
     })
   }
 
+  console.log('this.props', navigation)
+
   return (
     <View style={ styles.container }>
       <Button
@@ -71,6 +73,11 @@ const PhotoPicker = ({ photo, setPhoto, setBase64, setTags }) => {
       : null }
 
       <Text>{ tags.join(' ') }</Text>
+
+      <Button
+        title="Go to Recipies screen"
+        onPress={ () => navigation.navigate('Recipies') }
+      />
     </View>
   )
 }
@@ -96,7 +103,7 @@ const PhotoPickerScreen = connect(mapState, mapDispatch)(PhotoPicker)
 
 const App = StackNavigator({
   Home: { screen: PhotoPickerScreen },
-  // Recipies: { screen: PhotoPickerScreen },
+  Recipies: { screen: RecipiesScreen },
 })
 
 // export default connect(mapState, mapDispatch)(App)
