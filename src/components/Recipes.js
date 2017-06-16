@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Image, View, Text } from 'react-native'
+import { Button, Image, View, Text, WebView, Linking } from 'react-native'
 import { connect } from 'react-redux'
 
 import styles from '../style'
@@ -23,6 +23,7 @@ const Recipes = ({ photo, recipes }) => {
       <Text>Here are the ingredients I see: { tags.join(' ') }</Text>
 
       <Text>Recipes: { recipeList.map(entry => entry.label) }</Text>
+
 
     </View>
   )

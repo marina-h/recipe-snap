@@ -1,6 +1,6 @@
 import React from 'react'
 import { ImagePicker } from 'expo'
-import { Button, Image, View, Text, ImageEditor, ImageStore } from 'react-native'
+import { Button, Image, View, Text, ImageEditor, ImageStore, Linking } from 'react-native'
 import { connect } from 'react-redux'
 import {
   StackNavigator,
@@ -69,6 +69,10 @@ const PhotoPicker = ({ photo, setPhoto, setBase64, setTags, navigation }) => {
 
       {/* Add I'm feeling lucky option to select */}
       {/* Add dietary restrictions */}
+
+      <Button
+      title="Link"
+      onPress={ () => {Linking.openURL('https://github.com/facebook/react-native').catch(err => console.error('An error occurred', err)) }} />
     </View>
   )
 }
