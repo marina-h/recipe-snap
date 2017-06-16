@@ -17,37 +17,38 @@ const Picker = ({ photo, setPhoto, setBase64, setTags }) => {
     })
 
     if (!result.cancelled) {
-      setPhoto(result.uri.replace('file://', ''))
+      const fixedPhotoUrl = result.uri.replace('file://', '')
+      setPhoto(fixedPhotoUrl)
 
-      // Image.getSize(photoUrl, (width, height) => {
-      //   let imageSize = {
-      //     size: { width, height },
-      //     offset: { x: 0, y: 0 }
-      //   }
+      Image.getSize(fixedPhotoUrl, (width, height) => {
+        let imageSize = {
+          size: { width, height },
+          offset: { x: 0, y: 0 }
+        }
 
-      //   // https://github.com/facebook/react-native/issues/12114
-      //   ImageEditor.cropImage(photoUrl, imageSize, (imageURI) => {
-      //     ImageStore.getBase64ForTag(imageURI, (base64Data) => {
-      //       setBase64(base64Data);
+        // https://github.com/facebook/react-native/issues/12114
+        // ImageEditor.cropImage(photoUrl, imageSize, (imageURI) => {
+        //   ImageStore.getBase64ForTag(imageURI, (base64Data) => {
+        //     setBase64(base64Data);
 
-      //       let testBase64 = this.state.pictureBase64
-      //       app.models.predict(Clarifai.FOOD_MODEL, { base64: photoBase64 })
-      //       .then((res) => {
-      //         // console.log('Clarifai result = ', res);
-      //         let tags = [];
-      //         for (let i = 0; i<res.outputs[0].data.concepts.length; i++) {
-      //           tags.push(res.outputs[0].data.concepts[i].name + ' ')
-      //         }
-      //         setTags(tags)
-      //       },
-      //       (error)=>{
-      //         console.log(error);
-      //       });
+        //     let testBase64 = this.state.pictureBase64
+        //     app.models.predict(Clarifai.FOOD_MODEL, { base64: photoBase64 })
+        //     .then((res) => {
+        //       // console.log('Clarifai result = ', res);
+        //       let tags = [];
+        //       for (let i = 0; i<res.outputs[0].data.concepts.length; i++) {
+        //         tags.push(res.outputs[0].data.concepts[i].name + ' ')
+        //       }
+        //       setTags(tags)
+        //     },
+        //     (error)=>{
+        //       console.log(error);
+        //     });
 
-      //       ImageStore.removeImageForTag(imageURI);
-      //     }, (reason) => console.log(reason) )
-      //   }, (reason) => console.log(reason) )
-      // }, (reason) => console.log(reason))
+        //     ImageStore.removeImageForTag(imageURI);
+        //   }, (reason) => console.log('ERROR 3: 'reason) )
+        // }, (reason) => console.log('ERROR 2: 'reason) )
+      }, (reason) => console.log('ERROR 1: ', reason))
     }
   };
 
