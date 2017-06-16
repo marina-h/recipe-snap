@@ -9,7 +9,7 @@ import {
 import styles from '../style'
 import { clarifaiApp } from '../secrets'
 import { setPhotoUrl, setPhotoBase64, setPhotoTags } from '../redux/photo'
-import RecipiesScreen from './Recipies'
+import RecipesScreen from './Recipes'
 
 /* -----------------    COMPONENT    ------------------ */
 
@@ -36,7 +36,7 @@ const PhotoPicker = ({ photo, setPhoto, setBase64, setTags, navigation }) => {
         ImageEditor.cropImage(fixedPhotoUrl, imageSize, (imageUri) => {
           ImageStore.getBase64ForTag(imageUri, (base64Data) => {
             setBase64(base64Data)
-            getClarifaiTags(base64Data)
+            setClarifaiTagsAndRecipes(base64Data)
             ImageStore.removeImageForTag(imageUri);
           }, (reason) => console.log('ERROR 3: ', reason) )
         }, (reason) => console.log('ERROR 2: ', reason) )
@@ -44,7 +44,7 @@ const PhotoPicker = ({ photo, setPhoto, setBase64, setTags, navigation }) => {
     }
   }
 
-  const getClarifaiTags = (base64) => {
+  const setClarifaiTagsAndRecipes = (base64) => {
     clarifaiApp.models.predict(Clarifai.FOOD_MODEL, { base64: base64 })
     .then((res) => {
       // console.log('Clarifai result = ', res);
@@ -54,7 +54,7 @@ const PhotoPicker = ({ photo, setPhoto, setBase64, setTags, navigation }) => {
         tags.push(concepts[i].name)
       }
       setTags(tags)
-      navigate('Recipies')
+      navigate('Recipes')
     }, (error) => {
       console.log('ERROR getting clarifai tags: ', error);
     })
@@ -67,10 +67,8 @@ const PhotoPicker = ({ photo, setPhoto, setBase64, setTags, navigation }) => {
         onPress={ pickImage }
       />
 
-      {/*<Button
-        title="Go to Recipies screen"
-        onPress={ () => navigation.navigate('Recipies') }
-      />*/}
+      {/* Add I'm feeling lucky option to select */}
+      {/* Add dietary restrictions */}
     </View>
   )
 }
@@ -96,8 +94,7 @@ const PhotoPickerScreen = connect(mapState, mapDispatch)(PhotoPicker)
 
 const App = StackNavigator({
   Home: { screen: PhotoPickerScreen },
-  Recipies: { screen: RecipiesScreen },
+  Recipes: { screen: RecipesScreen },
 })
 
-// export default connect(mapState, mapDispatch)(App)
 export default connect()(App)

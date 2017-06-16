@@ -7,17 +7,22 @@ import styles from '../style'
 
 /* -----------------    COMPONENT    ------------------ */
 
-const Recipies = ({ photo }) => {
+const Recipes = ({ photo, recipes }) => {
   let { photoUrl, tags } = photo
+  let { recipeList } = recipes
 
   return (
     <View style={ styles.container }>
+
+      {/* Maybe add a way to select ingredients from tags list */}
 
       { photoUrl
       ? <Image source={{ uri: photoUrl }} style={ styles.image } />
       : null }
 
-      <Text>{ tags.join(' ') }</Text>
+      <Text>Here are the ingredients I see: { tags.join(' ') }</Text>
+
+      <Text>Recipes: { recipeList.map(entry => entry.label) }</Text>
 
     </View>
   )
@@ -25,12 +30,12 @@ const Recipies = ({ photo }) => {
 
 /* -----------------   REACT-REDUX   ------------------ */
 
-const mapState = ({ photo }) => ({ photo })
+const mapState = ({ photo, recipes }) => ({ photo, recipes })
 const mapDispatch = dispatch => ({
 })
 
 /* -----------------    NAVIGATOR    ------------------ */
 
-const RecipiesScreen = connect(mapState, mapDispatch)(Recipies)
+const RecipesScreen = connect(mapState, mapDispatch)(Recipes)
 
-export default RecipiesScreen
+export default RecipesScreen
