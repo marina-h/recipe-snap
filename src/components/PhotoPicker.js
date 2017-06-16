@@ -16,32 +16,47 @@ import RecipesScreen from './Recipes'
 const PhotoPicker = ({ photo, setPhoto, setBase64, setTags, navigation }) => {
   let { navigate } = navigation
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
+  const pickPhoto = async () => {
+    let choice = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
     })
 
-    if (!result.cancelled) {
-      const fixedPhotoUrl = result.uri.replace('file://', '')
-      setPhoto(fixedPhotoUrl)
-
-      Image.getSize(fixedPhotoUrl, (width, height) => {
-        let imageSize = {
-          size: { width, height },
-          offset: { x: 0, y: 0 }
-        }
-
-        // https://github.com/facebook/react-native/issues/12114
-        ImageEditor.cropImage(fixedPhotoUrl, imageSize, (imageUri) => {
-          ImageStore.getBase64ForTag(imageUri, (base64Data) => {
-            setBase64(base64Data)
-            setClarifaiTagsAndRecipes(base64Data)
-            ImageStore.removeImageForTag(imageUri);
-          }, (reason) => console.log('ERROR 3: ', reason) )
-        }, (reason) => console.log('ERROR 2: ', reason) )
-      }, (reason) => console.log('ERROR 1: ', reason))
+    if (!choice.cancelled) {
+      getImageUrl(choice)
     }
+  }
+
+  const takePhoto = async () => {
+    let choice = await ImagePicker.launchCameraAsync({
+      allowsEditing: true,
+      aspect: [4, 3],
+    })
+
+    if (!choice.cancelled) {
+      getImageUrl(choice)
+    }
+  }
+
+  const getImageUrl = (input) => {
+    const fixedPhotoUrl = input.uri.replace('file://', '')
+    setPhoto(fixedPhotoUrl)
+
+    Image.getSize(fixedPhotoUrl, (width, height) => {
+      let imageSize = {
+        size: { width, height },
+        offset: { x: 0, y: 0 }
+      }
+
+      // https://github.com/facebook/react-native/issues/12114
+      ImageEditor.cropImage(fixedPhotoUrl, imageSize, (imageUri) => {
+        ImageStore.getBase64ForTag(imageUri, (base64Data) => {
+          setBase64(base64Data)
+          setClarifaiTagsAndRecipes(base64Data)
+          ImageStore.removeImageForTag(imageUri);
+        }, (reason) => console.log('ERROR 3: ', reason) )
+      }, (reason) => console.log('ERROR 2: ', reason) )
+    }, (reason) => console.log('ERROR 1: ', reason))
   }
 
   const setClarifaiTagsAndRecipes = (base64) => {
@@ -63,8 +78,13 @@ const PhotoPicker = ({ photo, setPhoto, setBase64, setTags, navigation }) => {
   return (
     <View style={ styles.container }>
       <Button
-        title="Pick a food photo from your camera roll!"
-        onPress={ pickImage }
+        title="Pick a food photo from your camera roll"
+        onPress={ pickPhoto }
+      />
+
+      <Button
+        title="Take a photo of your food"
+        onPress={ takePhoto }
       />
 
       {/* Add I'm feeling lucky option to select */}
