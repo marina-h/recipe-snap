@@ -8,8 +8,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   image: {
-    width: 200,
-    height: 200
+    // flex: 1,
+    width: 250,
+    height: 250
   }
 });
 

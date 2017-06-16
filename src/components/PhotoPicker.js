@@ -2,6 +2,10 @@ import React from 'react'
 import { ImagePicker } from 'expo'
 import { Button, Image, View, Text, ImageEditor, ImageStore } from 'react-native'
 import { connect } from 'react-redux'
+import {
+  StackNavigator,
+} from 'react-navigation'
+
 
 import styles from '../style'
 import { clarifaiApp } from '../secrets'
@@ -9,7 +13,7 @@ import { setPhotoUrl, setPhotoBase64, setPhotoTags } from '../redux/photo'
 
 /* -----------------    COMPONENT    ------------------ */
 
-const Picker = ({ photo, setPhoto, setBase64, setTags }) => {
+const PhotoPicker = ({ photo, setPhoto, setBase64, setTags }) => {
   let { photoUrl, photoBase64, tags } = photo
 
   const pickImage = async () => {
@@ -71,7 +75,7 @@ const Picker = ({ photo, setPhoto, setBase64, setTags }) => {
   )
 }
 
-/* -----------------    CONTAINER    ------------------ */
+/* -----------------   REACT-REDUX   ------------------ */
 
 const mapState = ({ photo }) => ({ photo })
 const mapDispatch = dispatch => ({
@@ -86,4 +90,14 @@ const mapDispatch = dispatch => ({
   }
 })
 
-export default connect(mapState, mapDispatch)(Picker)
+/* -----------------    NAVIGATOR    ------------------ */
+
+const PhotoPickerScreen = connect(mapState, mapDispatch)(PhotoPicker)
+
+const App = StackNavigator({
+  Home: { screen: PhotoPickerScreen },
+  // Recipies: { screen: PhotoPickerScreen },
+})
+
+// export default connect(mapState, mapDispatch)(App)
+export default connect()(App)
