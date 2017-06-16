@@ -64,6 +64,8 @@ class Recipes extends Component {
                 <Button
                   title="Link to original website"
                   onPress={ () => visitRecipeUrl(recipe.url) } />
+
+                {/*{ Add a select option to keep recipe in store. At the bottom of the page, add a Share link that can send all recipe links at once }*/}
               </View>
             ))
           }
