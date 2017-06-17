@@ -3,7 +3,6 @@ import { Button, Image, View, Text, ScrollView, Linking, Share, TouchableHighlig
 import { connect } from 'react-redux'
 
 import styles from '../style'
-// import { setPhotoUrl, setPhotoBase64, setPhotoTags } from '../redux/photo'
 
 /* -----------------    COMPONENT    ------------------ */
 
@@ -49,7 +48,8 @@ class Recipes extends Component {
 
           {/*{ Show something if there are no recipes :( }*/}
           {
-            recipeList.map((recipe, idx) => (
+            recipeList.length
+            ? recipeList.map((recipe, idx) => (
               <View key={ idx } >
                 <Image source={{ uri: recipe.image }} style={ styles.image } />
                 <Text>{ recipe.label }</Text>
@@ -61,11 +61,13 @@ class Recipes extends Component {
                 </TouchableHighlight>
                 <Button
                   title="Link to original website"
-                  onPress={ () => visitRecipeUrl(recipe.url) } />
+                  onPress={ () => visitRecipeUrl(recipe.url) }
+                  />
 
                 {/*{ Add a select option to keep recipe in store. At the bottom of the page, add a Share link that can send all recipe links at once }*/}
               </View>
-            ))
+              ))
+            : <Text>No recipies found :(</Text>
           }
 
         </ScrollView>

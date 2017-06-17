@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { ImagePicker } from 'expo'
-import { Button, Image, View, Text, ImageEditor, ImageStore, Linking } from 'react-native'
-import { CheckBox } from 'react-native-elements'
+import { Image, View, Text, ImageEditor, ImageStore, Linking } from 'react-native'
+import { Button, CheckBox } from 'react-native-elements'
 import { connect } from 'react-redux'
 import {
   StackNavigator,
@@ -10,6 +10,7 @@ import {
 import styles from '../style'
 import { clarifaiApp } from '../secrets'
 import { setPhotoUrl, setPhotoBase64, setPhotoTags } from '../redux/photo'
+import { resetRecipies } from '../redux/recipes'
 import RecipesScreen from './Recipes'
 
 /* -----------------    COMPONENT    ------------------ */
@@ -20,9 +21,7 @@ class PhotoPicker extends Component {
     this.state = {
       vegetarian: false,
       vegan: false,
-      'low-carb': false,
-      'low-fat': false,
-      'high-protein': false,
+      'sugar-conscious': false,
       'peanut-free': false,
     }
     this.changeCheckboxState = this.changeCheckboxState.bind(this)
@@ -35,7 +34,7 @@ class PhotoPicker extends Component {
   }
 
   render() {
-    let { photo, setPhoto, setBase64, setTags, navigation } = this.props
+    let { photo, setPhoto, setBase64, setTags, clearRecipies, navigation } = this.props
     let { navigate } = navigation
 
     const pickPhoto = async () => {
@@ -74,6 +73,7 @@ class PhotoPicker extends Component {
         ImageEditor.cropImage(fixedPhotoUrl, imageSize, (imageUri) => {
           ImageStore.getBase64ForTag(imageUri, (base64Data) => {
             setBase64(base64Data)
+            clearRecipies()
             setClarifaiTagsAndRecipes(base64Data)
             ImageStore.removeImageForTag(imageUri);
           }, (reason) => console.log('ERROR 3: ', reason) )
@@ -118,12 +118,19 @@ class PhotoPicker extends Component {
 
     return (
       <View style={ styles.container }>
+
+        {/*{ Insert "Recipe Snap" here}*/}
+
         <Button
+          raised
           title="Pick a food photo from your camera roll"
           onPress={ pickPhoto }
         />
 
+        <Text>Or:</Text>
+
         <Button
+          raised
           title="Take a photo of your food"
           onPress={ takePhoto }
         />
@@ -136,11 +143,7 @@ class PhotoPicker extends Component {
           { createCheckbox('vegan') }
         </View>
         <View style={ styles.checkboxRow } >
-          { createCheckbox('low-carb') }
-          { createCheckbox('low-fat') }
-        </View>
-        <View style={ styles.checkboxRow } >
-          { createCheckbox('high-protein') }
+          { createCheckbox('sugar-conscious') }
           { createCheckbox('peanut-free') }
         </View>
 
@@ -161,6 +164,9 @@ const mapDispatch = dispatch => ({
   },
   setTags: (tags, prefs) => {
     dispatch(setPhotoTags(tags, prefs))
+  },
+  clearRecipies: () => {
+    dispatch(resetRecipies)
   }
 })
 
