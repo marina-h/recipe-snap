@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import {
   StackNavigator,
 } from 'react-navigation'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import styles from '../style'
 import { clarifaiApp } from '../secrets'
@@ -23,13 +24,28 @@ class PhotoPicker extends Component {
       vegan: false,
       'sugar-conscious': false,
       'peanut-free': false,
+      loading: false
     }
     this.changeCheckboxState = this.changeCheckboxState.bind(this)
+    this.startLoading = this.startLoading.bind(this)
+    this.stopLoading = this.stopLoading.bind(this)
   }
 
   changeCheckboxState(option) {
     this.setState({
       [option]: !this.state[option]
+    })
+  }
+
+  startLoading() {
+    this.setState({
+      loading: true
+    })
+  }
+
+  stopLoading() {
+    this.setState({
+      loading: false
     })
   }
 
@@ -60,6 +76,9 @@ class PhotoPicker extends Component {
     }
 
     const getImageUrl = (input) => {
+
+      this.startLoading()
+
       const fixedPhotoUrl = input.uri.replace('file://', '')
       setPhoto(fixedPhotoUrl)
 
@@ -84,13 +103,13 @@ class PhotoPicker extends Component {
     const setClarifaiTagsAndRecipes = (base64) => {
       clarifaiApp.models.predict(Clarifai.FOOD_MODEL, { base64: base64 })
       .then((res) => {
-        // console.log('Clarifai result = ', res);
         let tags = []
         const concepts = res.outputs[0].data.concepts
         for (let i = 0; i < 3; i++) {
           tags.push(concepts[i].name)
         }
         setTags(tags, getPreferences())
+        this.stopLoading()
         navigate('Recipes')
       }, (error) => {
         console.log('ERROR getting clarifai tags: ', error);
@@ -99,7 +118,7 @@ class PhotoPicker extends Component {
 
     const getPreferences = () => {
       return Object.keys(this.state).filter(key => {
-        return this.state[key]
+        return this.state[key] && key !== 'loading'
       })
     }
 
@@ -117,36 +136,50 @@ class PhotoPicker extends Component {
     }
 
     return (
-      <View style={ styles.container }>
+      <View style={ styles.container } >
+        { !this.state.loading
+          ?
+          <View style={ styles.container }>
 
-        {/*{ Insert "Recipe Snap" here}*/}
+            {/*{ Insert "Recipe Snap" here}*/}
 
-        <Button
-          raised
-          title="Pick a food photo from your camera roll"
-          onPress={ pickPhoto }
-        />
+            <Button
+              raised
+              large
+              title="Pick a photo from your camera roll"
+              backgroundColor="#009688"
+              icon={{ name: 'photo-library' }}
+              onPress={ pickPhoto }
+            />
 
-        <Text>Or:</Text>
+            <Text style={ [styles.mainFont, styles.mainText] }>Or:</Text>
 
-        <Button
-          raised
-          title="Take a photo of your food"
-          onPress={ takePhoto }
-        />
+            <Button
+              raised
+              large
+              title="Take a photo of your food"
+              backgroundColor="#009688"
+              icon={{ name: 'add-a-photo' }}
+              onPress={ takePhoto }
+            />
 
-        {/* Add "I'm feeling lucky" option to select */}
+            {/* Add "I'm feeling lucky" option to select */}
 
-        <Text>Options: </Text>
-        <View style={ styles.checkboxRow } >
-          { createCheckbox('vegetarian') }
-          { createCheckbox('vegan') }
+            <Text style={ [styles.mainFont, styles.mainTextSmall] }>Options: </Text>
+            <View style={ styles.checkboxRow } >
+              { createCheckbox('vegetarian') }
+              { createCheckbox('vegan') }
+            </View>
+            <View style={ styles.checkboxRow } >
+              { createCheckbox('sugar-conscious') }
+              { createCheckbox('peanut-free') }
+            </View>
+          </View>
+        :
+        <View style={{ flex: 1 }}>
+          <Spinner visible={this.state.loading} textContent={"Searching for tasty recipes..."} textStyle={{color: '#FFF'}} />
         </View>
-        <View style={ styles.checkboxRow } >
-          { createCheckbox('sugar-conscious') }
-          { createCheckbox('peanut-free') }
-        </View>
-
+      }
       </View>
     )
   }
