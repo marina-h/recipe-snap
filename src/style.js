@@ -8,9 +8,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   image: {
-    // flex: 1,
     width: 250,
     height: 250
+  },
+  checkboxRow: {
+    flexDirection: 'row'
   }
 });
 
