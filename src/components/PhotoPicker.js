@@ -18,8 +18,10 @@ class PhotoPicker extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      vegetarian: true
-      // preferences: [] // ['vegetarian', 'vegan']
+      vegetarian: false,
+      vegan: false,
+      glutenFree: false,
+      shellfishFree: false
     }
     this.changeCheckboxState = this.changeCheckboxState.bind(this)
   }
@@ -93,6 +95,19 @@ class PhotoPicker extends Component {
       })
     }
 
+    const createCheckbox = (option) => {
+      return (
+        <CheckBox
+            center
+            title={ option }
+            checkedIcon='dot-circle-o'
+            uncheckedIcon='circle-o'
+            checked={ this.state[option] }
+            onIconPress={ () => this.changeCheckboxState(option) }
+          />
+      )
+    }
+
     return (
       <View style={ styles.container }>
         <Button
@@ -106,17 +121,9 @@ class PhotoPicker extends Component {
         />
 
         {/* Add "I'm feeling lucky" option to select */}
-        {/* Add dietary restrictions */}
 
         <View style={ styles.checkboxRow } >
-          <CheckBox
-            center
-            title='Vegan'
-            checkedIcon='dot-circle-o'
-            uncheckedIcon='circle-o'
-            checked={ this.state.vegetarian }
-            onIconPress={ this.changeCheckboxState }
-          />
+          { createCheckbox('vegetarian') }
         </View>
 
       </View>
