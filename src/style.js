@@ -1,21 +1,31 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-  container: {
+  photoPicker: {
     flex: 1,
     // backgroundColor: '#C8E6C9',
     alignItems: 'center',
     justifyContent: 'center',
   },
+  backgroundImage: {
+    flex: 1,
+    width: null,
+    height: null,
+    resizeMode: 'cover'
+  },
   image: {
-    width: 250,
-    height: 250
+    width: 280,
+    height: 280
   },
   checkboxRow: {
     flexDirection: 'row'
   },
+  checkbox: {
+    // backgroundColor: "#C8E6C9"
+  },
   mainFont: {
     // fontFamily: 'Thonburi'
+    backgroundColor: 'rgba(0,0,0,0)',
   },
   mainText: {
     fontSize: 28,

@@ -131,53 +131,63 @@ class PhotoPicker extends Component {
             uncheckedIcon='circle-o'
             checked={ this.state[option] }
             onPress={ () => this.changeCheckboxState(option) }
+            containerStyle={ styles.checkbox }
           />
       )
     }
 
     return (
-      <View style={ styles.container } >
+      <View style={ styles.photoPicker } >
         { !this.state.loading
           ?
-          <View style={ styles.container }>
+          <Image
+            source={ require('../images/salad-background.jpg' )}
+            style={ styles.backgroundImage } >
+            <View style={ styles.photoPicker }>
 
-            {/*{ Insert "Recipe Snap" here}*/}
+              {/*{ Insert "Recipe Snap" here}*/}
 
-            <Button
-              raised
-              large
-              title="Pick a photo from your camera roll"
-              backgroundColor="#009688"
-              icon={{ name: 'photo-library' }}
-              onPress={ pickPhoto }
-            />
+              <Button
+                raised
+                large
+                title="Pick a photo from your camera roll"
+                backgroundColor="#009688"
+                icon={{ name: 'photo-library' }}
+                onPress={ pickPhoto }
+              />
 
-            <Text style={ [styles.mainFont, styles.mainText] }>Or:</Text>
+              <Text style={ [styles.mainFont, styles.mainText] }>Or:</Text>
 
-            <Button
-              raised
-              large
-              title="Take a photo of your food"
-              backgroundColor="#009688"
-              icon={{ name: 'add-a-photo' }}
-              onPress={ takePhoto }
-            />
+              <Button
+                raised
+                large
+                title="Take a photo of your food"
+                backgroundColor="#009688"
+                icon={{ name: 'add-a-photo' }}
+                onPress={ takePhoto }
+              />
 
-            {/* Add "I'm feeling lucky" option to select */}
+              {/* Add "I'm feeling lucky" option to select */}
 
-            <Text style={ [styles.mainFont, styles.mainTextSmall] }>Options: </Text>
-            <View style={ styles.checkboxRow } >
-              { createCheckbox('vegetarian') }
-              { createCheckbox('vegan') }
+              <Text style={ [styles.mainFont, styles.mainTextSmall] }>Options: </Text>
+              <View style={ styles.checkboxRow } >
+                { createCheckbox('vegetarian') }
+                { createCheckbox('vegan') }
+              </View>
+              <View style={ styles.checkboxRow } >
+                { createCheckbox('sugar-conscious') }
+                { createCheckbox('peanut-free') }
+              </View>
             </View>
-            <View style={ styles.checkboxRow } >
-              { createCheckbox('sugar-conscious') }
-              { createCheckbox('peanut-free') }
-            </View>
-          </View>
+          </Image>
         :
         <View style={{ flex: 1 }}>
-          <Spinner visible={this.state.loading} textContent={"Searching for tasty recipes..."} textStyle={{color: '#FFF'}} />
+          <Spinner
+            visible={this.state.loading}
+            textContent={ "Searching for tasty recipes..." }
+            textStyle={{ color: '#000' }}
+            color="#000"
+            overlayColor="#F0EFF5" />
         </View>
       }
       </View>

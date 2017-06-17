@@ -64,10 +64,11 @@ class Recipes extends Component {
                   onPress={ () => visitRecipeUrl(recipe.url) }
                   />
 
-                {/*{ Add a select option to keep recipe in store. At the bottom of the page, add a Share link that can send all recipe links at once }*/}
+                {/*{ Add a select option to keep recipe in store. At the bottom of the page, add a Export link that can send all recipe links at once }*/}
+
               </View>
               ))
-            : <Text>No recipies found :(</Text>
+            : <Text style={ styles.mainText }>Sorry, I couldn't find any recipies with those ingredients and options :(</Text>
           }
 
         </ScrollView>
