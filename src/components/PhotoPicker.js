@@ -20,8 +20,10 @@ class PhotoPicker extends Component {
     this.state = {
       vegetarian: false,
       vegan: false,
-      glutenFree: false,
-      shellfishFree: false
+      'low-carb': false,
+      'low-fat': false,
+      'high-protein': false,
+      'peanut-free': false,
     }
     this.changeCheckboxState = this.changeCheckboxState.bind(this)
   }
@@ -88,10 +90,16 @@ class PhotoPicker extends Component {
         for (let i = 0; i < 3; i++) {
           tags.push(concepts[i].name)
         }
-        setTags(tags, this.state.preferences)
+        setTags(tags, getPreferences())
         navigate('Recipes')
       }, (error) => {
         console.log('ERROR getting clarifai tags: ', error);
+      })
+    }
+
+    const getPreferences = () => {
+      return Object.keys(this.state).filter(key => {
+        return this.state[key]
       })
     }
 
@@ -103,7 +111,7 @@ class PhotoPicker extends Component {
             checkedIcon='dot-circle-o'
             uncheckedIcon='circle-o'
             checked={ this.state[option] }
-            onIconPress={ () => this.changeCheckboxState(option) }
+            onPress={ () => this.changeCheckboxState(option) }
           />
       )
     }
@@ -122,8 +130,18 @@ class PhotoPicker extends Component {
 
         {/* Add "I'm feeling lucky" option to select */}
 
+        <Text>Options: </Text>
         <View style={ styles.checkboxRow } >
           { createCheckbox('vegetarian') }
+          { createCheckbox('vegan') }
+        </View>
+        <View style={ styles.checkboxRow } >
+          { createCheckbox('low-carb') }
+          { createCheckbox('low-fat') }
+        </View>
+        <View style={ styles.checkboxRow } >
+          { createCheckbox('high-protein') }
+          { createCheckbox('peanut-free') }
         </View>
 
       </View>

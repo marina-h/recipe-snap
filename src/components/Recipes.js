@@ -26,7 +26,7 @@ class Recipes extends Component {
 
   render() {
     let { photoUrl, tags } = this.props.photo
-    let { recipeList } = this.props.recipes
+    let { recipeList, preferences } = this.props.recipes
 
     const visitRecipeUrl = (url) => {
       Linking.openURL(url)
@@ -45,7 +45,7 @@ class Recipes extends Component {
           : null }
 
           <Text>Here are the ingredients I see: { tags.join(', ') }</Text>
-          <Text>Here are your dietary preferences:</Text>
+          <Text>Here are your dietary preferences: { preferences.join(', ') }</Text>
 
           {/*{ Show something if there are no recipes :( }*/}
           {

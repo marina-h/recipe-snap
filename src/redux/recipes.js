@@ -5,15 +5,18 @@ import { edamamId, edamamKey } from '../secrets'
 /* -----------------    ACTIONS     ------------------ */
 
 const SET_RECIPES = 'SET_RECIPES'
+const SET_PREFERENCES = 'SET_PREFERENCES'
 
 /* ------------   ACTION CREATORS     ------------------ */
 
 const setRecipes = recipes => ({ type: SET_RECIPES, recipes })
+const setPreferences = preferences => ({ type: SET_PREFERENCES, preferences })
 
 /* ------------       REDUCERS     ------------------ */
 
 const initialCategoryState = {
-  recipeList: [{}]
+  recipeList: [{}],
+  preferences: []
 }
 
 const reducer = (state = initialCategoryState, action) => {
@@ -22,6 +25,10 @@ const reducer = (state = initialCategoryState, action) => {
   switch (action.type) {
   case SET_RECIPES:
     newState.recipeList = action.recipes
+    break
+
+  case SET_PREFERENCES:
+    newState.preferences = action.preferences
     break
 
   default:
@@ -42,7 +49,7 @@ export const getRecipesList = (tags, preferences = []) => dispatch => {
 
   console.log('edamamApiPath', edamamApiPath)
 
-  // Set preferences in state here!
+  dispatch(setPreferences(preferences))
 
   axios.get(edamamApiPath)
   .then(res => {
