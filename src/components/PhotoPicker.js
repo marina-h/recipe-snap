@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { ImagePicker } from 'expo'
-import { Button, Image, View, Text, ImageEditor, ImageStore } from 'react-native'
+import { Button, Image, View, Text, ImageEditor, ImageStore, Linking } from 'react-native'
+import { CheckBox } from 'react-native-elements'
 import { connect } from 'react-redux'
 import {
   StackNavigator,
@@ -13,17 +14,54 @@ import RecipesScreen from './Recipes'
 
 /* -----------------    COMPONENT    ------------------ */
 
-const PhotoPicker = ({ photo, setPhoto, setBase64, setTags, navigation }) => {
-  let { navigate } = navigation
+class PhotoPicker extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      vegetarian: false,
+      vegan: false,
+      'low-carb': false,
+      'low-fat': false,
+      'high-protein': false,
+      'peanut-free': false,
+    }
+    this.changeCheckboxState = this.changeCheckboxState.bind(this)
+  }
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
+  changeCheckboxState(option) {
+    this.setState({
+      [option]: !this.state[option]
     })
+  }
 
-    if (!result.cancelled) {
-      const fixedPhotoUrl = result.uri.replace('file://', '')
+  render() {
+    let { photo, setPhoto, setBase64, setTags, navigation } = this.props
+    let { navigate } = navigation
+
+    const pickPhoto = async () => {
+      let choice = await ImagePicker.launchImageLibraryAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+      })
+
+      if (!choice.cancelled) {
+        getImageUrl(choice)
+      }
+    }
+
+    const takePhoto = async () => {
+      let choice = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+      })
+
+      if (!choice.cancelled) {
+        getImageUrl(choice)
+      }
+    }
+
+    const getImageUrl = (input) => {
+      const fixedPhotoUrl = input.uri.replace('file://', '')
       setPhoto(fixedPhotoUrl)
 
       Image.getSize(fixedPhotoUrl, (width, height) => {
@@ -42,35 +80,73 @@ const PhotoPicker = ({ photo, setPhoto, setBase64, setTags, navigation }) => {
         }, (reason) => console.log('ERROR 2: ', reason) )
       }, (reason) => console.log('ERROR 1: ', reason))
     }
+
+    const setClarifaiTagsAndRecipes = (base64) => {
+      clarifaiApp.models.predict(Clarifai.FOOD_MODEL, { base64: base64 })
+      .then((res) => {
+        // console.log('Clarifai result = ', res);
+        let tags = []
+        const concepts = res.outputs[0].data.concepts
+        for (let i = 0; i < 3; i++) {
+          tags.push(concepts[i].name)
+        }
+        setTags(tags, getPreferences())
+        navigate('Recipes')
+      }, (error) => {
+        console.log('ERROR getting clarifai tags: ', error);
+      })
+    }
+
+    const getPreferences = () => {
+      return Object.keys(this.state).filter(key => {
+        return this.state[key]
+      })
+    }
+
+    const createCheckbox = (option) => {
+      return (
+        <CheckBox
+            center
+            title={ option }
+            checkedIcon='dot-circle-o'
+            uncheckedIcon='circle-o'
+            checked={ this.state[option] }
+            onPress={ () => this.changeCheckboxState(option) }
+          />
+      )
+    }
+
+    return (
+      <View style={ styles.container }>
+        <Button
+          title="Pick a food photo from your camera roll"
+          onPress={ pickPhoto }
+        />
+
+        <Button
+          title="Take a photo of your food"
+          onPress={ takePhoto }
+        />
+
+        {/* Add "I'm feeling lucky" option to select */}
+
+        <Text>Options: </Text>
+        <View style={ styles.checkboxRow } >
+          { createCheckbox('vegetarian') }
+          { createCheckbox('vegan') }
+        </View>
+        <View style={ styles.checkboxRow } >
+          { createCheckbox('low-carb') }
+          { createCheckbox('low-fat') }
+        </View>
+        <View style={ styles.checkboxRow } >
+          { createCheckbox('high-protein') }
+          { createCheckbox('peanut-free') }
+        </View>
+
+      </View>
+    )
   }
-
-  const setClarifaiTagsAndRecipes = (base64) => {
-    clarifaiApp.models.predict(Clarifai.FOOD_MODEL, { base64: base64 })
-    .then((res) => {
-      // console.log('Clarifai result = ', res);
-      let tags = []
-      const concepts = res.outputs[0].data.concepts
-      for (let i = 0; i < 3; i++) {
-        tags.push(concepts[i].name)
-      }
-      setTags(tags)
-      navigate('Recipes')
-    }, (error) => {
-      console.log('ERROR getting clarifai tags: ', error);
-    })
-  }
-
-  return (
-    <View style={ styles.container }>
-      <Button
-        title="Pick a food photo from your camera roll!"
-        onPress={ pickImage }
-      />
-
-      {/* Add I'm feeling lucky option to select */}
-      {/* Add dietary restrictions */}
-    </View>
-  )
 }
 
 /* -----------------   REACT-REDUX   ------------------ */
@@ -83,8 +159,8 @@ const mapDispatch = dispatch => ({
   setBase64: (base64) => {
     dispatch(setPhotoBase64(base64))
   },
-  setTags: (tags) => {
-    dispatch(setPhotoTags(tags))
+  setTags: (tags, prefs) => {
+    dispatch(setPhotoTags(tags, prefs))
   }
 })
 

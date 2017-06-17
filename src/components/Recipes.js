@@ -1,5 +1,5 @@
-import React from 'react'
-import { Button, Image, View, Text } from 'react-native'
+import React, { Component } from 'react'
+import { Button, Image, View, Text, ScrollView, Linking, Share, TouchableHighlight } from 'react-native'
 import { connect } from 'react-redux'
 
 import styles from '../style'
@@ -7,25 +7,71 @@ import styles from '../style'
 
 /* -----------------    COMPONENT    ------------------ */
 
-const Recipes = ({ photo, recipes }) => {
-  let { photoUrl, tags } = photo
-  let { recipeList } = recipes
+class Recipes extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: `Your Recipes`,
+  })
 
-  return (
-    <View style={ styles.container }>
+  shareRecipe(name, url) {
+    Share.share({
+      title: name,
+      message: `Here's a recipe I found with Recipe Snap: ${ name }`,
+      url: url
+    }, {
+      dialogTitle: 'Sharing options: ',
+      tintColor: 'green'
+    })
+    .catch(err => console.log(err))
+  }
 
-      {/* Maybe add a way to select ingredients from tags list */}
+  render() {
+    let { photoUrl, tags } = this.props.photo
+    let { recipeList, preferences } = this.props.recipes
 
-      { photoUrl
-      ? <Image source={{ uri: photoUrl }} style={ styles.image } />
-      : null }
+    const visitRecipeUrl = (url) => {
+      Linking.openURL(url)
+      .catch(err => console.error('Error: ', err))
+    }
 
-      <Text>Here are the ingredients I see: { tags.join(' ') }</Text>
+    return (
+      <View>
+        <ScrollView>
 
-      <Text>Recipes: { recipeList.map(entry => entry.label) }</Text>
+          {/* Maybe add a separate screen to select ingredients from tags list */}
+          {/* Possibly make each recipe show more info (ingredients, calories) when tapped */}
 
-    </View>
-  )
+          { photoUrl
+          ? <Image source={{ uri: photoUrl }} style={ styles.image } />
+          : null }
+
+          <Text>Here are the ingredients I see: { tags.join(', ') }</Text>
+          <Text>Here are your dietary preferences: { preferences.join(', ') }</Text>
+
+          {/*{ Show something if there are no recipes :( }*/}
+          {
+            recipeList.map((recipe, idx) => (
+              <View key={ idx } >
+                <Image source={{ uri: recipe.image }} style={ styles.image } />
+                <Text>{ recipe.label }</Text>
+                <Text>Source: { recipe.source }</Text>
+                <TouchableHighlight onPress={ () => this.shareRecipe(recipe.label, recipe.url) }>
+                  <View>
+                    <Text>Click to share this recipe</Text>
+                  </View>
+                </TouchableHighlight>
+                <Button
+                  title="Link to original website"
+                  onPress={ () => visitRecipeUrl(recipe.url) } />
+
+                {/*{ Add a select option to keep recipe in store. At the bottom of the page, add a Share link that can send all recipe links at once }*/}
+              </View>
+            ))
+          }
+
+        </ScrollView>
+      </View>
+    )
+  }
 }
 
 /* -----------------   REACT-REDUX   ------------------ */
