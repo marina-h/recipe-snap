@@ -68,42 +68,46 @@ class SavedRecipes extends Component {
     ]
 
     return (
-      <View>
-        <ScrollView>
+      <Image
+        source={ require('../images/salad-background.jpg' )}
+        style={ styles.backgroundImage } >
+        <View>
+          <ScrollView>
 
-          {/* Maybe add a separate screen to select ingredients from tags list */}
-          {/* Possibly make each recipe show more info (ingredients, calories) when tapped */}
+            {/* Maybe add a separate screen to select ingredients from tags list */}
+            {/* Possibly make each recipe show more info (ingredients, calories) when tapped */}
 
-          {
-            savedRecipesList.length
-            ? savedRecipesList.map((recipe, idx) => (
-              <Swipeout key={ idx }
-                right={ swipeoutBtns }
-                autoClose={ true }>
-                <View>
-                  <Image source={{ uri: recipe.image }} style={ styles.image } />
-                  <Text>{ recipe.label }</Text>
-                  <Text>Source: { recipe.source }</Text>
-                  <TouchableHighlight onPress={ () => this.shareRecipe(recipe.label, recipe.url) }>
-                    <View>
-                      <Text>Click to share this recipe</Text>
-                    </View>
-                  </TouchableHighlight>
-                  <Button
-                    title="Link to original website"
-                    onPress={ () => visitRecipeUrl(recipe.url) }
-                    />
+            {
+              savedRecipesList.length
+              ? savedRecipesList.map((recipe, idx) => (
+                <Swipeout key={ idx }
+                  right={ swipeoutBtns }
+                  autoClose={ true }>
+                  <View>
+                    <Image source={{ uri: recipe.image }} style={ styles.image } />
+                    <Text>{ recipe.label }</Text>
+                    <Text>Source: { recipe.source }</Text>
+                    <TouchableHighlight onPress={ () => this.shareRecipe(recipe.label, recipe.url) }>
+                      <View>
+                        <Text>Click to share this recipe</Text>
+                      </View>
+                    </TouchableHighlight>
+                    <Button
+                      title="Link to original website"
+                      onPress={ () => visitRecipeUrl(recipe.url) }
+                      />
 
-                  {/*{ Add a select option to keep recipe in store. At the bottom of the page, add a Export link that can send all recipe links at once }*/}
+                    {/*{ Add a select option to keep recipe in store. At the bottom of the page, add a Export link that can send all recipe links at once }*/}
 
-                </View>
-              </Swipeout>
-              ))
-            : <Text style={ [styles.photoPicker, styles.mainText] }>No saved recipes!</Text>
-          }
+                  </View>
+                </Swipeout>
+                ))
+              : <Text style={ [styles.mainFont, styles.mainText] }>No saved recipes!</Text>
+            }
 
-        </ScrollView>
-      </View>
+          </ScrollView>
+        </View>
+      </Image>
     )
   }
 }

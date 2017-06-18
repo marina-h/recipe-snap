@@ -22,12 +22,13 @@ class Options extends Component {
       'sugar-conscious': false,
       'peanut-free': false,
       loading: false,
-      chosenTags: ['chicken', 'rice'],
-      chosenPrefs: ['peanut-free']
+      chosenTags: [],
+      chosenPrefs: []
     }
     this.changeCheckboxState = this.changeCheckboxState.bind(this)
     this.startLoading = this.startLoading.bind(this)
     this.stopLoading = this.stopLoading.bind(this)
+    this.addOrDeleteIngredient = this.addOrDeleteIngredient.bind(this)
   }
 
   changeCheckboxState(option) {
@@ -48,11 +49,26 @@ class Options extends Component {
     })
   }
 
+  addOrDeleteIngredient(newIngredient) {
+    let chosenList = this.state.chosenTags
+    if (!chosenList.includes(newIngredient)) {
+      this.setState({
+        chosenTags: [...chosenList, newIngredient]
+      })
+    } else {
+      this.setState({
+        chosenTags: chosenList.filter(item => item !== newIngredient)
+      })
+    }
+    console.log('current State', this.state )
+  }
+
   render() {
       let { photo, getRecipes, navigation } = this.props
       let { chosenTags, chosenPrefs } = this.state
       let { photoUrl, tags } = photo
       let { navigate } = navigation
+      let addOrDeleteIngredient = this.addOrDeleteIngredient
 
       const requestRecipies = () => {
         this.startLoading()
@@ -65,6 +81,20 @@ class Options extends Component {
         return Object.keys(this.state).filter(key => {
           return this.state[key] && key !== 'loading'
         })
+      }
+
+      const createIngredientCheckbox = (ingredient) => {
+        console.log('ingredient, ', ingredient)
+        let chosenTagsList = this.state.chosenTags
+        return (
+          <CheckBox
+              center
+              title={ ingredient }
+              checked={ chosenTagsList.includes(ingredient) }
+              onPress={ () => this.addOrDeleteIngredient(ingredient) }
+              containerStyle={ styles.checkbox }
+            />
+        )
       }
 
       const createCheckbox = (option) => {
@@ -90,14 +120,14 @@ class Options extends Component {
               style={ styles.backgroundImage } >
               <View style={ styles.photoPicker } >
 
-                {/* Add "I'm feeling lucky" option to select */}
-
-                {/*{ photoUrl
-                  ? <Image source={{ uri: photoUrl }} style={ styles.image } />
-                  : null }
-
-                  <Text>Here are the ingredients I see: { tags.join(', ') }</Text>
-                }*/}
+                <Text style={ [styles.mainFont, styles.mainTextSmall] }>Choose your ingredients: </Text>
+                {
+                  tags.map((tag, idx) => (
+                    <View key={ idx }>
+                      { createIngredientCheckbox(tag) }
+                    </View>
+                  ))
+                }
 
                 <Text style={ [styles.mainFont, styles.mainTextSmall] }>Options: </Text>
                 <View style={ styles.checkboxRow } >
