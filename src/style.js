@@ -41,30 +41,45 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 10
   },
-  card: {
-    // flex: 1,
-    // flexDirection: 'column',
-    justifyContent: 'center',
-    // alignItems: 'center',
-    borderRadius: 10,
-    marginBottom: 30,
-    width: 350,
-    height: 350,
+  ingredients: {
+    flexDirection: 'row',
+    flexWrap: 'wrap'
   },
-  cardImage: {
-    // flex: 1,
-    // flexDirection: 'column',
+  // card: {
+  //   // flex: 1,
+  //   // flexDirection: 'column',
+  //   justifyContent: 'center',
+  //   // alignItems: 'center',
+  //   borderRadius: 10,
+  //   marginBottom: 30,
+  //   width: 350,
+  //   height: 350,
+  // },
+  // cardImage: {
+  //   // flex: 1,
+  //   // flexDirection: 'column',
+  //   justifyContent: 'center',
+  //   // alignItems: 'center',
+  //   borderRadius: 5,
+  //   width: 340,
+  //   height: 345,
+  // },
+  // cardTitle: {
+  //   position: 'absolute',
+  //   left: 15,
+  //   bottom: 10,
+  //   fontSize: 24,
+  // },
+  cardAction: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'center',
-    // alignItems: 'center',
-    borderRadius: 5,
-    width: 340,
-    height: 345,
   },
-  cardTitle: {
-    position: 'absolute',
-    left: 15,
-    bottom: 10,
-    fontSize: 24,
+  savedRecipeButtons: {
+    height: 40,
+    width: 100,
+    marginBottom: 40,
   },
   noMoreCardsText: {
     fontSize: 22,

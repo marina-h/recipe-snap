@@ -60,7 +60,6 @@ class Options extends Component {
         chosenTags: chosenList.filter(item => item !== newIngredient)
       })
     }
-    console.log('current State', this.state )
   }
 
   render() {
@@ -84,7 +83,6 @@ class Options extends Component {
       }
 
       const createIngredientCheckbox = (ingredient) => {
-        console.log('ingredient, ', ingredient)
         let chosenTagsList = this.state.chosenTags
         return (
           <CheckBox
@@ -121,13 +119,15 @@ class Options extends Component {
               <View style={ styles.photoPicker } >
 
                 <Text style={ [styles.mainFont, styles.mainTextSmall] }>Choose your ingredients: </Text>
-                {
-                  tags.map((tag, idx) => (
-                    <View key={ idx }>
-                      { createIngredientCheckbox(tag) }
-                    </View>
-                  ))
-                }
+                <View style={ styles.ingredients }>
+                  {
+                    tags.map((tag, idx) => (
+                      <View key={ idx }>
+                        { createIngredientCheckbox(tag) }
+                      </View>
+                    ))
+                  }
+                </View>
 
                 <Text style={ [styles.mainFont, styles.mainTextSmall] }>Options: </Text>
                 <View style={ styles.checkboxRow } >
