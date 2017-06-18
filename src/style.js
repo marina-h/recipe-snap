@@ -40,6 +40,16 @@ const styles = StyleSheet.create({
   badge: {
     color: '#FFFFFF',
     fontSize: 10
+  },
+  card: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 300,
+    height: 300,
+  },
+  noMoreCardsText: {
+    fontSize: 22,
   }
 });
 
