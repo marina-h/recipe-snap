@@ -55,11 +55,15 @@ const styles = StyleSheet.create({
     width: 350,
     height: 350,
   },
+  cardView: {
+    marginTop: 140,
+  },
   cardImage: {
     // flex: 1,
     // flexDirection: 'column',
     justifyContent: 'center',
     // alignItems: 'center',
+    marginRight: 10,
     borderRadius: 5,
     width: 340,
     height: 345,

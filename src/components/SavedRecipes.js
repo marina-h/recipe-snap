@@ -115,7 +115,6 @@ class SavedRecipes extends Component {
               ))
             : <View></View>
           }
-
         </ScrollView>
       </Image>
     )
@@ -134,25 +133,3 @@ const mapDispatch = dispatch => ({
 const SavedRecipesScreen = connect(mapState, mapDispatch)(SavedRecipes)
 
 export default SavedRecipesScreen
-
-// // {/*<Swipeout key={ idx }
-//   right={ swipeoutBtns }
-//   autoClose={ true }>
-//   <View>
-//     <Image source={{ uri: recipe.image }} style={ styles.image } />
-//     <Text>{ recipe.label }</Text>
-//     <Text>Source: { recipe.source }</Text>
-//     <TouchableHighlight onPress={ () => this.shareRecipe(recipe.label, recipe.url) }>
-//       <View>
-//         <Text>Click to share this recipe</Text>
-//       </View>
-//     </TouchableHighlight>
-//     <Button
-//       title="Link to original website"
-//       onPress={ () => visitRecipeUrl(recipe.url) }
-//       />
-
-//     {/*{ Add a select option to keep recipe in store. At the bottom of the page, add a Export link that can send all recipe links at once }*/}
-
-//   // </View>
-// </Swipeout>*/}

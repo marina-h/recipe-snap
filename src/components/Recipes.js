@@ -28,14 +28,13 @@ class Recipes extends Component {
 
     const renderCard = (card) => {
       return (
-        <View style={ styles.photoPicker } >
+        <View key={ Math.random() + '' } style={ styles.photoPicker } >
           <Card
-              key={ card.id }
-              containerStyle={ styles.card }
-              image={{ uri: card.image }}
-              featuredTitle={ createLabel(card) }
-              featuredTitleStyle={ styles.cardTitle }
-              imageStyle={ styles.cardImage }
+            containerStyle={ styles.card }
+            image={{ uri: card.image }}
+            featuredTitle={ createLabel(card) }
+            featuredTitleStyle={ styles.cardTitle }
+            imageStyle={ styles.cardImage }
             />
         </View>
       )
@@ -52,29 +51,34 @@ class Recipes extends Component {
 
     const renderNoMoreCards = () => {
       return (
-        <Card
-          containerStyle={ styles.card }
-          featuredTitle="No more cards"
-          featuredTitleStyle={{fontSize: 26}}
-          image={{ uri: 'https://i.imgflip.com/1j2oed.jpg' }}
-          imageStyle={ styles.cardImage }
-        />
+        <View key={ Math.random() + '' } style={ [styles.photoPicker, { marginTop: 170 } ] } >
+          <Card
+            containerStyle={ styles.card }
+            image={{ uri: 'https://media.giphy.com/media/lD76yTC5zxZPG/giphy.gif' }}
+            imageStyle={ styles.cardImage }
+          />
+        </View>
       )
     }
 
     return (
-      <View>
-        { recipeList.length
-          ? <SwipeDeck
-            data={ recipeList }
-            renderCard={ renderCard }
-            renderNoMoreCards={ renderNoMoreCards }
-            onSwipeRight={ onSwipeRight }
-            onSwipeLeft={ onSwipeLeft }
-            />
-          : <Text style={ styles.mainText }>Sorry, I couldn't find any recipies with those ingredients and options :(</Text>
-        }
-      </View>
+      <Image
+        source={ require('../images/salad-background.jpg' )}
+        style={ styles.backgroundImage } >
+        <View style={ styles.cardView } key={ Math.random() + '' }>
+          { recipeList.length
+            ? <SwipeDeck
+              key={ recipeList }
+              data={ recipeList }
+              renderCard={ renderCard }
+              renderNoMoreCards={ renderNoMoreCards }
+              onSwipeRight={ onSwipeRight }
+              onSwipeLeft={ onSwipeLeft }
+              />
+            : <Text style={ styles.mainText }>Sorry, I couldn't find any recipies with those ingredients and options :(</Text>
+          }
+        </View>
+      </Image>
     )
   }
 }

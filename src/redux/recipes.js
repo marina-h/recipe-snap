@@ -57,7 +57,7 @@ export const getRecipesList = (tags, preferences = []) => dispatch => {
   let queries = tags.map(tag => tag.split(' ')).join('+')
   console.log('Queries: ', queries, 'Tags', tags)
   let health = preferences.length ? `health=${preferences.join('&health=')}` : ''
-  let edamamApiPath = `https://api.edamam.com/search?q=${queries}&app_id=${edamamId}&app_key=${edamamKey}&from0&to=3&${health}`
+  let edamamApiPath = `https://api.edamam.com/search?q=${queries}&app_id=${edamamId}&app_key=${edamamKey}&from0&to=5&${health}`
 
   console.log('edamamApiPath', edamamApiPath)
 
