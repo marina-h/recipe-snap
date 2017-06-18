@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import { Button, Image, View, Text, ScrollView, Linking, Share, TouchableHighlight } from 'react-native'
+import { Image, View, Text, ScrollView, Linking, Share, TouchableHighlight, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
+import { Button, SwipeDeck, Card } from 'react-native-elements';
 
 import styles from '../style'
-// import { setPhotoUrl, setPhotoBase64, setPhotoTags } from '../redux/photo'
+import { saveNewRecipe } from '../redux/saved'
 
 /* -----------------    COMPONENT    ------------------ */
 
@@ -12,75 +13,84 @@ class Recipes extends Component {
     title: `Your Recipes`,
   })
 
-  shareRecipe(name, url) {
-    Share.share({
-      title: name,
-      message: `Here's a recipe I found with Recipe Snap: ${ name }`,
-      url: url
-    }, {
-      dialogTitle: 'Sharing options: ',
-      tintColor: 'green'
-    })
-    .catch(err => console.log(err))
-  }
-
   render() {
-    let { photoUrl, tags } = this.props.photo
-    let { recipeList, preferences } = this.props.recipes
+    let { recipes, saved, saveRecipe } = this.props
+    let { recipeList } = recipes
 
     const visitRecipeUrl = (url) => {
       Linking.openURL(url)
       .catch(err => console.error('Error: ', err))
     }
 
+    const createLabel = (recipe) => {
+      return `${recipe.label}${'\n'}Source: ${recipe.source}`
+    }
+
+    const renderCard = (card) => {
+      return (
+        <View key={ Math.random() + '' } style={ styles.photoPicker } >
+          <Card
+            containerStyle={ styles.card }
+            image={{ uri: card.image }}
+            featuredTitle={ createLabel(card) }
+            featuredTitleStyle={ styles.cardTitle }
+            imageStyle={ styles.cardImage }
+            />
+        </View>
+      )
+    }
+
+    const onSwipeRight = (card) => {
+      console.log("Card saved: " + card.label)
+      saveRecipe(card)
+    }
+
+    const onSwipeLeft = (card) => {
+      console.log("Card dismissed: " + card.label);
+    }
+
+    const renderNoMoreCards = () => {
+      return (
+        <View key={ Math.random() + '' } style={ [styles.photoPicker, { marginTop: 170 } ] } >
+          <Card
+            containerStyle={ styles.card }
+            image={{ uri: 'https://media.giphy.com/media/lD76yTC5zxZPG/giphy.gif' }}
+            imageStyle={ styles.cardImage }
+          />
+        </View>
+      )
+    }
+
     return (
-      <View>
-        <ScrollView>
-
-          {/* Maybe add a separate screen to select ingredients from tags list */}
-          {/* Possibly make each recipe show more info (ingredients, calories) when tapped */}
-
-          { photoUrl
-          ? <Image source={{ uri: photoUrl }} style={ styles.image } />
-          : null }
-
-          <Text>Here are the ingredients I see: { tags.join(', ') }</Text>
-          <Text>Here are your dietary preferences: { preferences.join(', ') }</Text>
-
-          {/*{ Show something if there are no recipes :( }*/}
-          {
-            recipeList.map((recipe, idx) => (
-              <View key={ idx } >
-                <Image source={{ uri: recipe.image }} style={ styles.image } />
-                <Text>{ recipe.label }</Text>
-                <Text>Source: { recipe.source }</Text>
-                <TouchableHighlight onPress={ () => this.shareRecipe(recipe.label, recipe.url) }>
-                  <View>
-                    <Text>Click to share this recipe</Text>
-                  </View>
-                </TouchableHighlight>
-                <Button
-                  title="Link to original website"
-                  onPress={ () => visitRecipeUrl(recipe.url) } />
-
-                {/*{ Add a select option to keep recipe in store. At the bottom of the page, add a Share link that can send all recipe links at once }*/}
-              </View>
-            ))
+      <Image
+        source={ require('../images/salad-background.jpg' )}
+        style={ styles.backgroundImage } >
+        <View style={ styles.cardView } key={ Math.random() + '' }>
+          { recipeList.length
+            ? <SwipeDeck
+              key={ recipeList }
+              data={ recipeList }
+              renderCard={ renderCard }
+              renderNoMoreCards={ renderNoMoreCards }
+              onSwipeRight={ onSwipeRight }
+              onSwipeLeft={ onSwipeLeft }
+              />
+            : <Text style={ styles.mainText }>Sorry, I couldn't find any recipies with those ingredients and options :(</Text>
           }
-
-        </ScrollView>
-      </View>
+        </View>
+      </Image>
     )
   }
 }
 
 /* -----------------   REACT-REDUX   ------------------ */
 
-const mapState = ({ photo, recipes }) => ({ photo, recipes })
+const mapState = ({ recipes }) => ({ recipes })
 const mapDispatch = dispatch => ({
+  saveRecipe: (recipe) => {
+    dispatch(saveNewRecipe(recipe))
+  }
 })
-
-/* -----------------    NAVIGATOR    ------------------ */
 
 const RecipesScreen = connect(mapState, mapDispatch)(Recipes)
 

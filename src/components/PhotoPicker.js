@@ -1,31 +1,30 @@
 import React, { Component } from 'react'
 import { ImagePicker } from 'expo'
-import { Button, Image, View, Text, ImageEditor, ImageStore, Linking } from 'react-native'
-import { CheckBox } from 'react-native-elements'
+import { Image, View, Text, ImageEditor, ImageStore, Linking } from 'react-native'
+import { Button, CheckBox } from 'react-native-elements'
 import { connect } from 'react-redux'
-import {
-  StackNavigator,
-} from 'react-navigation'
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import styles from '../style'
 import { clarifaiApp } from '../secrets'
 import { setPhotoUrl, setPhotoBase64, setPhotoTags } from '../redux/photo'
-import RecipesScreen from './Recipes'
+import { resetRecipies } from '../redux/recipes'
 
 /* -----------------    COMPONENT    ------------------ */
 
 class PhotoPicker extends Component {
+    static navigationOptions = ({ navigation }) => ({
+    title: `Recipe Snap`,
+  })
+
   constructor(props) {
     super(props)
     this.state = {
-      vegetarian: false,
-      vegan: false,
-      'low-carb': false,
-      'low-fat': false,
-      'high-protein': false,
-      'peanut-free': false,
+      loading: false
     }
     this.changeCheckboxState = this.changeCheckboxState.bind(this)
+    this.startLoading = this.startLoading.bind(this)
+    this.stopLoading = this.stopLoading.bind(this)
   }
 
   changeCheckboxState(option) {
@@ -34,8 +33,20 @@ class PhotoPicker extends Component {
     })
   }
 
+  startLoading() {
+    this.setState({
+      loading: true
+    })
+  }
+
+  stopLoading() {
+    this.setState({
+      loading: false
+    })
+  }
+
   render() {
-    let { photo, setPhoto, setBase64, setTags, navigation } = this.props
+    let { photo, setPhoto, setBase64, setTags, clearRecipies, navigation } = this.props
     let { navigate } = navigation
 
     const pickPhoto = async () => {
@@ -61,6 +72,9 @@ class PhotoPicker extends Component {
     }
 
     const getImageUrl = (input) => {
+
+      this.startLoading()
+
       const fixedPhotoUrl = input.uri.replace('file://', '')
       setPhoto(fixedPhotoUrl)
 
@@ -74,24 +88,25 @@ class PhotoPicker extends Component {
         ImageEditor.cropImage(fixedPhotoUrl, imageSize, (imageUri) => {
           ImageStore.getBase64ForTag(imageUri, (base64Data) => {
             setBase64(base64Data)
-            setClarifaiTagsAndRecipes(base64Data)
+            clearRecipies()
+            setClarifaiTagsAndNavigate(base64Data)
             ImageStore.removeImageForTag(imageUri);
           }, (reason) => console.log('ERROR 3: ', reason) )
         }, (reason) => console.log('ERROR 2: ', reason) )
       }, (reason) => console.log('ERROR 1: ', reason))
     }
 
-    const setClarifaiTagsAndRecipes = (base64) => {
+    const setClarifaiTagsAndNavigate = (base64) => {
       clarifaiApp.models.predict(Clarifai.FOOD_MODEL, { base64: base64 })
       .then((res) => {
-        // console.log('Clarifai result = ', res);
         let tags = []
         const concepts = res.outputs[0].data.concepts
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 8; i++) {
           tags.push(concepts[i].name)
         }
-        setTags(tags, getPreferences())
-        navigate('Recipes')
+        setTags(tags)
+        this.stopLoading()
+        navigate('Options')
       }, (error) => {
         console.log('ERROR getting clarifai tags: ', error);
       })
@@ -99,7 +114,7 @@ class PhotoPicker extends Component {
 
     const getPreferences = () => {
       return Object.keys(this.state).filter(key => {
-        return this.state[key]
+        return this.state[key] && key !== 'loading'
       })
     }
 
@@ -112,38 +127,56 @@ class PhotoPicker extends Component {
             uncheckedIcon='circle-o'
             checked={ this.state[option] }
             onPress={ () => this.changeCheckboxState(option) }
+            containerStyle={ styles.checkbox }
           />
       )
     }
 
     return (
-      <View style={ styles.container }>
-        <Button
-          title="Pick a food photo from your camera roll"
-          onPress={ pickPhoto }
-        />
+      <View style={ styles.photoPicker } >
+        { !this.state.loading
+          ?
+          <Image
+            source={ require('../images/salad-background.jpg' )}
+            style={ styles.backgroundImage } >
+            <View style={ styles.photoPicker }>
 
-        <Button
-          title="Take a photo of your food"
-          onPress={ takePhoto }
-        />
+              {/*{ Insert "Recipe Snap" here}*/}
 
-        {/* Add "I'm feeling lucky" option to select */}
+              <Button
+                raised
+                large
+                title="Pick a photo from your camera roll"
+                backgroundColor="#009688"
+                icon={{ name: 'photo-library' }}
+                onPress={ pickPhoto }
+              />
 
-        <Text>Options: </Text>
-        <View style={ styles.checkboxRow } >
-          { createCheckbox('vegetarian') }
-          { createCheckbox('vegan') }
+              <Text style={ [styles.mainFont, styles.mainText] }>Or:</Text>
+
+              <Button
+                raised
+                large
+                title="Take a photo of your food"
+                backgroundColor="#009688"
+                icon={{ name: 'add-a-photo' }}
+                onPress={ takePhoto }
+              />
+
+              {/* Add "I'm feeling lucky" option to select */}
+
+            </View>
+          </Image>
+        :
+        <View style={{ flex: 1 }}>
+          <Spinner
+            visible={this.state.loading}
+            textContent={ "Analyzing your photo..." }
+            textStyle={{ color: '#000' }}
+            color="#000"
+            overlayColor="#F0EFF5" />
         </View>
-        <View style={ styles.checkboxRow } >
-          { createCheckbox('low-carb') }
-          { createCheckbox('low-fat') }
-        </View>
-        <View style={ styles.checkboxRow } >
-          { createCheckbox('high-protein') }
-          { createCheckbox('peanut-free') }
-        </View>
-
+      }
       </View>
     )
   }
@@ -161,16 +194,12 @@ const mapDispatch = dispatch => ({
   },
   setTags: (tags, prefs) => {
     dispatch(setPhotoTags(tags, prefs))
+  },
+  clearRecipies: () => {
+    dispatch(resetRecipies)
   }
 })
 
-/* -----------------    NAVIGATOR    ------------------ */
-
 const PhotoPickerScreen = connect(mapState, mapDispatch)(PhotoPicker)
 
-const App = StackNavigator({
-  Home: { screen: PhotoPickerScreen },
-  Recipes: { screen: RecipesScreen },
-})
-
-export default connect()(App)
+export default PhotoPickerScreen
