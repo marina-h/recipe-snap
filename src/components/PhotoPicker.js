@@ -3,19 +3,20 @@ import { ImagePicker } from 'expo'
 import { Image, View, Text, ImageEditor, ImageStore, Linking } from 'react-native'
 import { Button, CheckBox } from 'react-native-elements'
 import { connect } from 'react-redux'
-import { StackNavigator } from 'react-navigation'
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import styles from '../style'
 import { clarifaiApp } from '../secrets'
 import { setPhotoUrl, setPhotoBase64, setPhotoTags } from '../redux/photo'
 import { resetRecipies } from '../redux/recipes'
-import OptionsScreen from './Options'
-import RecipesScreen from './Recipes'
 
 /* -----------------    COMPONENT    ------------------ */
 
 class PhotoPicker extends Component {
+    static navigationOptions = ({ navigation }) => ({
+    title: `Recipe Snap`,
+  })
+
   constructor(props) {
     super(props)
     this.state = {
@@ -199,14 +200,6 @@ const mapDispatch = dispatch => ({
   }
 })
 
-/* -----------------    NAVIGATOR    ------------------ */
-
 const PhotoPickerScreen = connect(mapState, mapDispatch)(PhotoPicker)
 
-const App = StackNavigator({
-  Home: { screen: PhotoPickerScreen },
-  Options: { screen: OptionsScreen },
-  Recipes: { screen: RecipesScreen },
-})
-
-export default connect()(App)
+export default PhotoPickerScreen

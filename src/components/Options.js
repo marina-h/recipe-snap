@@ -10,6 +10,10 @@ import { getRecipesList } from '../redux/recipes'
 /* -----------------    COMPONENT    ------------------ */
 
 class Options extends Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: `Choose Ingredients`,
+  })
+
   constructor(props) {
     super(props)
     this.state = {
@@ -132,15 +136,13 @@ class Options extends Component {
 
   /* -----------------   REACT-REDUX   ------------------ */
 
-  const mapState = ({ photo }) => ({ photo })
-  const mapDispatch = dispatch => ({
-    getRecipes: (tags, prefs) => {
-      dispatch(getRecipesList(tags, prefs))
-    }
-  })
+const mapState = ({ photo }) => ({ photo })
+const mapDispatch = dispatch => ({
+  getRecipes: (tags, prefs) => {
+    dispatch(getRecipesList(tags, prefs))
+  }
+})
 
-  /* -----------------    NAVIGATOR    ------------------ */
+const OptionsScreen = connect(mapState, mapDispatch)(Options)
 
-  const OptionsScreen = connect(mapState, mapDispatch)(Options)
-
-  export default OptionsScreen
+export default OptionsScreen

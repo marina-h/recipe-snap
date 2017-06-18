@@ -5,7 +5,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 import thunkMiddleware from 'redux-thunk'
 
 import rootReducer from './redux'
-import PhotoPicker from './components/PhotoPicker'
+import Navigator from './components/Navigator'
 
 const store = createStore(
   rootReducer,
@@ -16,7 +16,7 @@ const store = createStore(
 
 const Main = () => (
   <Provider store={ store }>
-    <PhotoPicker />
+    <Navigator />
   </Provider>
 )
 

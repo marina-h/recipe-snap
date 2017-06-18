@@ -36,6 +36,10 @@ const styles = StyleSheet.create({
     fontSize: 24,
     marginTop: 28,
     marginBottom: 10,
+  },
+  badge: {
+    color: '#FFFFFF',
+    fontSize: 10
   }
 });
 

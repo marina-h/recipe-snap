@@ -1,15 +1,39 @@
 import React, { Component } from 'react'
 import { Button, Image, View, Text, ScrollView, Linking, Share, TouchableHighlight } from 'react-native'
 import { connect } from 'react-redux'
+import { Icon } from 'react-native-elements'
 import Swipeout from 'react-native-swipeout'
+import IconBadge from 'react-native-icon-badge'
 
 import styles from '../style'
 
 /* -----------------    COMPONENT    ------------------ */
 
-class Recipes extends Component {
+class SavedRecipes extends Component {
+  constructor(props) {
+    super(props)
+  }
+
   static navigationOptions = ({ navigation }) => ({
-    title: `Your Recipes`,
+    title: `Saved Recipes`,
+    tabBarLabel: `Saved Recipes`,
+    tabBarIcon: <Icon name="list" />
+    // () => {
+    //   return (
+    //     <IconBadge
+    //       MainElement={
+    //         <Icon name="list" />
+    //       }
+    //       BadgeElement={
+    //         <Text style={ styles.badge }>{ Object.keys(this.props.saved.SavedRecipes).length }</Text>
+    //       }
+    //       IconBadgeStyle={{
+    //         width: 12,
+    //         height: 12,
+    //       }}
+    //     />
+    //   )
+    // }
   })
 
   shareRecipe(name, url) {
@@ -47,6 +71,7 @@ class Recipes extends Component {
       <View>
         <ScrollView>
 
+          {/* Maybe add a separate screen to select ingredients from tags list */}
           {/* Possibly make each recipe show more info (ingredients, calories) when tapped */}
 
           {
@@ -85,10 +110,10 @@ class Recipes extends Component {
 
 /* -----------------   REACT-REDUX   ------------------ */
 
-const mapState = ({ photo, recipes }) => ({ photo, recipes })
+const mapState = ({ photo, recipes, saved }) => ({ photo, recipes, saved })
 const mapDispatch = dispatch => ({
 })
 
-const RecipesScreen = connect(mapState, mapDispatch)(Recipes)
+const SavedRecipesScreen = connect(mapState, mapDispatch)(SavedRecipes)
 
-export default RecipesScreen
+export default SavedRecipesScreen
