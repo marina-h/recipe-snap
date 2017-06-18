@@ -1,87 +1,108 @@
 import React, { Component } from 'react'
-import { Button, Image, View, Text, ScrollView, Linking, Share, TouchableHighlight } from 'react-native'
+import { Button, Image, View, Text, ScrollView, Linking, Share, TouchableHighlight, StyleSheet } from 'react-native'
 import { connect } from 'react-redux'
 import Swipeout from 'react-native-swipeout'
+import SwipeCards from 'react-native-swipe-cards'
 
 import styles from '../style'
 
 /* -----------------    COMPONENT    ------------------ */
 
-class Recipes extends Component {
-  static navigationOptions = ({ navigation }) => ({
-    title: `Your Recipes`,
-  })
+// class Recipes extends Component {
+//   static navigationOptions = ({ navigation }) => ({
+//     title: `Your Recipes`,
+//   })
 
-  shareRecipe(name, url) {
-    Share.share({
-      title: name,
-      message: `Here's a recipe I found with Recipe Snap: ${ name }`,
-      url: url
-    }, {
-      dialogTitle: 'Sharing options: ',
-      tintColor: 'green'
-    })
-    .catch(err => console.log(err))
+//   render() {
+//     return (
+//       <View style={[styles.card, {backgroundColor: this.props.backgroundColor}]}>
+//         <Text>{this.props.text}</Text>
+//       </View>
+//     )
+//   }
+
+// }
+
+let Card = React.createClass({
+  render() {
+    return (
+      <View style={[stylesTest.card, {backgroundColor: this.props.backgroundColor}]}>
+        <Text>{this.props.text}</Text>
+      </View>
+    )
+  }
+})
+
+class NoMoreCards extends Component {
+  constructor(props) {
+    super(props);
   }
 
   render() {
-    let { photoUrl, tags } = this.props.photo
-    let { recipeList } = this.props.recipes
-
-    const visitRecipeUrl = (url) => {
-      Linking.openURL(url)
-      .catch(err => console.error('Error: ', err))
-    }
-
-    const swipeoutBtns = [
-      {
-        text: 'Button',
-        onPress: () => {
-          console.log('Pressed')
-        },
-        sensitivity: 20
-      }
-    ]
-
     return (
       <View>
-        <ScrollView>
-
-          {/* Possibly make each recipe show more info (ingredients, calories) when tapped */}
-
-          {
-            recipeList.length
-            ? recipeList.map((recipe, idx) => (
-              <Swipeout key={ idx }
-                right={ swipeoutBtns }
-                autoClose={ true }>
-                <View>
-                  <Image source={{ uri: recipe.image }} style={ styles.image } />
-                  <Text>{ recipe.label }</Text>
-                  <Text>Source: { recipe.source }</Text>
-                  <TouchableHighlight onPress={ () => this.shareRecipe(recipe.label, recipe.url) }>
-                    <View>
-                      <Text>Click to share this recipe</Text>
-                    </View>
-                  </TouchableHighlight>
-                  <Button
-                    title="Link to original website"
-                    onPress={ () => visitRecipeUrl(recipe.url) }
-                    />
-
-                  {/*{ Add a select option to keep recipe in store. At the bottom of the page, add a Export link that can send all recipe links at once }*/}
-
-                </View>
-              </Swipeout>
-              ))
-            : <Text style={ styles.mainText }>Sorry, I couldn't find any recipies with those ingredients and options :(</Text>
-          }
-
-        </ScrollView>
+        <Text style={stylesTest.noMoreCardsText}>No more cards</Text>
       </View>
     )
   }
 }
+
+const Cards = [
+  {text: 'Tomato', backgroundColor: 'red'},
+  {text: 'Aubergine', backgroundColor: 'purple'},
+  {text: 'Courgette', backgroundColor: 'green'},
+  {text: 'Blueberry', backgroundColor: 'blue'},
+  {text: 'Umm...', backgroundColor: 'cyan'},
+  {text: 'orange', backgroundColor: 'orange'},
+]
+
+const test = React.createClass({
+  getInitialState() {
+    return {
+      cards: Cards
+    }
+  },
+  handleYup (card) {
+    console.log(`Yup for ${card.text}`)
+  },
+  handleNope (card) {
+    console.log(`Nope for ${card.text}`)
+  },
+  handleMaybe (card) {
+    console.log(`Maybe for ${card.text}`)
+  },
+  render() {
+    // If you want a stack of cards instead of one-per-one view, activate stack mode
+    // stack={true}
+    return (
+      <SwipeCards
+        cards={this.state.cards}
+        stack={true}
+
+        renderCard={(cardData) => <Card {...cardData} />}
+        renderNoMoreCards={() => <NoMoreCards />}
+
+        handleYup={this.handleYup}
+        handleNope={this.handleNope}
+        handleMaybe={this.handleMaybe}
+        hasMaybeAction
+      />
+    )
+  }
+})
+
+const stylesTest = StyleSheet.create({
+  card: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 300,
+    height: 300,
+  },
+  noMoreCardsText: {
+    fontSize: 22,
+  }
+})
 
 /* -----------------   REACT-REDUX   ------------------ */
 
@@ -89,6 +110,6 @@ const mapState = ({ photo, recipes }) => ({ photo, recipes })
 const mapDispatch = dispatch => ({
 })
 
-const RecipesScreen = connect(mapState, mapDispatch)(Recipes)
+const RecipesScreen = connect(mapState, mapDispatch)(test)
 
 export default RecipesScreen

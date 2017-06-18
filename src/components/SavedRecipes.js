@@ -43,7 +43,7 @@ class SavedRecipes extends Component {
       url: url
     }, {
       dialogTitle: 'Sharing options: ',
-      tintColor: 'green'
+      // tintColor: 'green'
     })
     .catch(err => console.log(err))
   }
