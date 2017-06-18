@@ -87,6 +87,7 @@ class SavedRecipes extends Component {
                   <Image
                     source={( require('../images/cloth.png') )}
                     style={ styles.cardBackground } >
+                    <View style={ styles.photoPicker } >
                     <CardTitle>
                       <Text style={ [styles.mainTextSmall, styles.mainFont] }>{ recipe.label }</Text>
                     </CardTitle>
@@ -114,6 +115,7 @@ class SavedRecipes extends Component {
                           backgroundColor="#009688"
                           onPress={() => deleteFromSavedList(recipe.url) } />
                       </View>
+                    </View>
                   </Image>
                 </Card>
               ))
