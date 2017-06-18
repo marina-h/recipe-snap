@@ -1,10 +1,12 @@
 /* -----------------    ACTIONS     ------------------ */
 
 const ADD_RECIPE = 'ADD_RECIPE'
+const DELETE_RECIPE = 'DELETE_RECIPE'
 
 /* ------------   ACTION CREATORS     ------------------ */
 
 const addRecipe = recipe => ({ type: ADD_RECIPE, recipe })
+const deleteRecipe = url => ({ type: DELETE_RECIPE, url })
 
 /* ------------       REDUCERS     ------------------ */
 
@@ -632,6 +634,10 @@ const reducer = (state = initialCategoryState, action) => {
     newState.savedRecipesList = [...state.savedRecipesList, action.recipe]
     break
 
+  case DELETE_RECIPE:
+    newState.savedRecipesList = state.savedRecipesList.filter(recipe => recipe.url !== action.url)
+    break
+
   default:
     return state
   }
@@ -643,6 +649,10 @@ const reducer = (state = initialCategoryState, action) => {
 
 export const saveNewRecipe = (recipe) => dispatch => {
   dispatch(addRecipe(recipe))
+}
+
+export const deleteFromSaved = (url) => dispatch => {
+  dispatch(deleteRecipe(url))
 }
 
 export default reducer

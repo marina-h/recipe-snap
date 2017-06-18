@@ -12,6 +12,7 @@ import {
 } from 'react-native-card-view';
 
 import styles from '../style'
+import { deleteFromSaved } from '../redux/saved'
 
 /* -----------------    COMPONENT    ------------------ */
 
@@ -55,7 +56,7 @@ class SavedRecipes extends Component {
   }
 
   render() {
-    let { saved } = this.props
+    let { saved, deleteFromSavedList } = this.props
     let { savedRecipesList } = saved
 
     const visitRecipeUrl = (url) => {
@@ -95,21 +96,24 @@ class SavedRecipes extends Component {
                         style={ styles.savedRecipeButtons }
                         title="Share"
                         icon={{ name: 'share' }}
+                        backgroundColor="#009688"
                         onPress={ () => this.shareRecipe(recipe.label, recipe.url) } />
                       <Button
                         style={ styles.savedRecipeButtons }
                         title="Visit website"
                         icon={{ name: 'open-in-browser' }}
+                        backgroundColor="#009688"
                         onPress={ () => visitRecipeUrl(recipe.url) } />
                       <Button
                         style={ styles.savedRecipeButtons }
                         title="Delete"
                         icon={{ name: 'delete' }}
-                        onPress={() => {}} />
+                        backgroundColor="#009688"
+                        onPress={() => deleteFromSavedList(recipe.url) } />
                     </View>
                   </Card>
               ))
-            : <Text style={ [styles.mainFont, styles.mainText] }>No saved recipes!</Text>
+            : <View></View>
           }
 
         </ScrollView>
@@ -122,6 +126,9 @@ class SavedRecipes extends Component {
 
 const mapState = ({ saved }) => ({ saved })
 const mapDispatch = dispatch => ({
+  deleteFromSavedList: (url) => {
+    dispatch(deleteFromSaved(url))
+  }
 })
 
 const SavedRecipesScreen = connect(mapState, mapDispatch)(SavedRecipes)
