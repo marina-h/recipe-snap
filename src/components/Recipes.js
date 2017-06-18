@@ -30,7 +30,7 @@ class Recipes extends Component {
       return (
         <View style={ styles.photoPicker } >
           <Card
-              key={ card }
+              key={ card.id }
               containerStyle={ styles.card }
               image={{ uri: card.image }}
               featuredTitle={ createLabel(card) }

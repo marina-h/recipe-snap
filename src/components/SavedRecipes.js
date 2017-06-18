@@ -49,8 +49,8 @@ class SavedRecipes extends Component {
   }
 
   render() {
-    let { photoUrl, tags } = this.props.photo
-    let { recipeList } = this.props.recipes
+    let { saved } = this.props
+    let { savedRecipesList } = saved
 
     const visitRecipeUrl = (url) => {
       Linking.openURL(url)
@@ -59,11 +59,11 @@ class SavedRecipes extends Component {
 
     const swipeoutBtns = [
       {
-        text: 'Button',
+        text: 'Delete',
         onPress: () => {
-          console.log('Pressed')
+          console.log('Deleted')
         },
-        sensitivity: 20
+        sensitivity: 10
       }
     ]
 
@@ -75,8 +75,8 @@ class SavedRecipes extends Component {
           {/* Possibly make each recipe show more info (ingredients, calories) when tapped */}
 
           {
-            recipeList.length
-            ? recipeList.map((recipe, idx) => (
+            savedRecipesList.length
+            ? savedRecipesList.map((recipe, idx) => (
               <Swipeout key={ idx }
                 right={ swipeoutBtns }
                 autoClose={ true }>
@@ -99,7 +99,7 @@ class SavedRecipes extends Component {
                 </View>
               </Swipeout>
               ))
-            : <Text style={ styles.mainText }>No saved recipes!</Text>
+            : <Text style={ [styles.photoPicker, styles.mainText] }>No saved recipes!</Text>
           }
 
         </ScrollView>
@@ -110,7 +110,7 @@ class SavedRecipes extends Component {
 
 /* -----------------   REACT-REDUX   ------------------ */
 
-const mapState = ({ photo, recipes, saved }) => ({ photo, recipes, saved })
+const mapState = ({ saved }) => ({ saved })
 const mapDispatch = dispatch => ({
 })
 

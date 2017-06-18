@@ -9,7 +9,7 @@ const addRecipe = recipe => ({ type: ADD_RECIPE, recipe })
 /* ------------       REDUCERS     ------------------ */
 
 const initialCategoryState = {
-  savedRecipes: [{}]
+  savedRecipesList: []
 }
 
 const reducer = (state = initialCategoryState, action) => {
@@ -17,7 +17,7 @@ const reducer = (state = initialCategoryState, action) => {
 
   switch (action.type) {
   case ADD_RECIPE:
-    newState.savedRecipes = [action.recipe, ...state.savedRecipes]
+    newState.savedRecipesList = [...state.savedRecipesList, action.recipe]
     break
 
   default:
