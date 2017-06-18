@@ -66,7 +66,10 @@ export const getRecipesList = (tags, preferences = []) => dispatch => {
 
   axios.get(edamamApiPath)
   .then(res => {
-    let recipes = res.data.hits.map(hit => hit.recipe)
+    let recipes = res.data.hits.map((hit, idx) => {
+      hit.recipe.id = `${idx}_${hit.recipe.uri}`
+      return hit.recipe
+    })
     dispatch(setRecipes(recipes))
   })
   .catch(err => {

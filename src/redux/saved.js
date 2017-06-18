@@ -9,7 +9,7 @@ const addRecipe = recipe => ({ type: ADD_RECIPE, recipe })
 /* ------------       REDUCERS     ------------------ */
 
 const initialCategoryState = {
-  savedRecipes: [ {test: 1}, {test2: 2 } ]
+  savedRecipes: [{}]
 }
 
 const reducer = (state = initialCategoryState, action) => {

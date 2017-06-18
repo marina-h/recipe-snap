@@ -42,15 +42,33 @@ const styles = StyleSheet.create({
     fontSize: 10
   },
   card: {
-    flex: 1,
+    // flex: 1,
+    // flexDirection: 'column',
     justifyContent: 'center',
-    alignItems: 'center',
-    width: 300,
-    height: 300,
+    // alignItems: 'center',
+    borderRadius: 10,
+    marginBottom: 30,
+    width: 350,
+    height: 350,
+  },
+  cardImage: {
+    // flex: 1,
+    // flexDirection: 'column',
+    justifyContent: 'center',
+    // alignItems: 'center',
+    borderRadius: 5,
+    width: 340,
+    height: 345,
+  },
+  cardTitle: {
+    position: 'absolute',
+    left: 15,
+    bottom: 10,
+    fontSize: 24,
   },
   noMoreCardsText: {
     fontSize: 22,
   }
-});
+})
 
 export default styles;

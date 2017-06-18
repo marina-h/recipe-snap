@@ -57,7 +57,6 @@ class Options extends Component {
       const requestRecipies = () => {
         this.startLoading()
         getRecipes(chosenTags, chosenPrefs)
-        console.log('requested')
         this.stopLoading()
         navigate('Recipes')
       }

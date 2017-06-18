@@ -99,7 +99,7 @@ class SavedRecipes extends Component {
                 </View>
               </Swipeout>
               ))
-            : <Text style={ styles.mainText }>Sorry, I couldn't find any recipies with those ingredients and options :(</Text>
+            : <Text style={ styles.mainText }>No saved recipes!</Text>
           }
 
         </ScrollView>
