@@ -1,20 +1,11 @@
 import React, { Component } from 'react'
-import { ImagePicker } from 'expo'
-import { Image, View, Text, ImageEditor, ImageStore, Linking } from 'react-native'
+import { Image, View, Text } from 'react-native'
 import { Button, CheckBox } from 'react-native-elements'
 import { connect } from 'react-redux'
-import {
-  StackNavigator,
-} from 'react-navigation'
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import styles from '../style'
-import { clarifaiApp } from '../secrets'
-import { setPhotoUrl, setPhotoBase64, setPhotoTags } from '../redux/photo'
-import { resetRecipies } from '../redux/recipes'
-
-import PhotoPickerScreen from './PhotoPicker'
-import RecipesScreen from './Recipes'
+import { getRecipesList } from '../redux/recipes'
 
 /* -----------------    COMPONENT    ------------------ */
 
@@ -26,7 +17,9 @@ class Options extends Component {
       vegan: false,
       'sugar-conscious': false,
       'peanut-free': false,
-      loading: false
+      loading: false,
+      chosenTags: ['chicken', 'rice'],
+      chosenPrefs: ['peanut-free']
     }
     this.changeCheckboxState = this.changeCheckboxState.bind(this)
     this.startLoading = this.startLoading.bind(this)
@@ -52,70 +45,17 @@ class Options extends Component {
   }
 
   render() {
-      let { photo, setPhoto, setBase64, setTags, clearRecipies, navigation } = this.props
+      let { photo, getRecipes, navigation } = this.props
+      let { chosenTags, chosenPrefs } = this.state
+      let { photoUrl, tags } = photo
       let { navigate } = navigation
 
-      const pickPhoto = async () => {
-        let choice = await ImagePicker.launchImageLibraryAsync({
-          allowsEditing: true,
-          aspect: [4, 3],
-        })
-
-        if (!choice.cancelled) {
-          getImageUrl(choice)
-        }
-      }
-
-      const takePhoto = async () => {
-        let choice = await ImagePicker.launchCameraAsync({
-          allowsEditing: true,
-          aspect: [4, 3],
-        })
-
-        if (!choice.cancelled) {
-          getImageUrl(choice)
-        }
-      }
-
-      const getImageUrl = (input) => {
-
+      const requestRecipies = () => {
         this.startLoading()
-
-        const fixedPhotoUrl = input.uri.replace('file://', '')
-        setPhoto(fixedPhotoUrl)
-
-        Image.getSize(fixedPhotoUrl, (width, height) => {
-          let imageSize = {
-            size: { width, height },
-            offset: { x: 0, y: 0 }
-          }
-
-          // https://github.com/facebook/react-native/issues/12114
-          ImageEditor.cropImage(fixedPhotoUrl, imageSize, (imageUri) => {
-            ImageStore.getBase64ForTag(imageUri, (base64Data) => {
-              setBase64(base64Data)
-              clearRecipies()
-              setClarifaiTagsAndRecipes(base64Data)
-              ImageStore.removeImageForTag(imageUri);
-            }, (reason) => console.log('ERROR 3: ', reason) )
-          }, (reason) => console.log('ERROR 2: ', reason) )
-        }, (reason) => console.log('ERROR 1: ', reason))
-      }
-
-      const setClarifaiTagsAndRecipes = (base64) => {
-        clarifaiApp.models.predict(Clarifai.FOOD_MODEL, { base64: base64 })
-        .then((res) => {
-          let tags = []
-          const concepts = res.outputs[0].data.concepts
-          for (let i = 0; i < 3; i++) {
-            tags.push(concepts[i].name)
-          }
-          setTags(tags, getPreferences())
-          this.stopLoading()
-          navigate('Recipes')
-        }, (error) => {
-          console.log('ERROR getting clarifai tags: ', error);
-        })
+        getRecipes(chosenTags, chosenPrefs)
+        console.log('requested')
+        this.stopLoading()
+        navigate('Recipes')
       }
 
       const getPreferences = () => {
@@ -145,9 +85,16 @@ class Options extends Component {
             <Image
               source={ require('../images/salad-background.jpg' )}
               style={ styles.backgroundImage } >
-              <View style={ styles.photoPicker }>
+              <View style={ styles.photoPicker } >
 
                 {/* Add "I'm feeling lucky" option to select */}
+
+                {/*{ photoUrl
+                  ? <Image source={{ uri: photoUrl }} style={ styles.image } />
+                  : null }
+
+                  <Text>Here are the ingredients I see: { tags.join(', ') }</Text>
+                }*/}
 
                 <Text style={ [styles.mainFont, styles.mainTextSmall] }>Options: </Text>
                 <View style={ styles.checkboxRow } >
@@ -158,13 +105,21 @@ class Options extends Component {
                   { createCheckbox('sugar-conscious') }
                   { createCheckbox('peanut-free') }
                 </View>
+
+                <Button
+                  raised
+                  large
+                  title="Find recipies!"
+                  backgroundColor="#009688"
+                  icon={{ name: 'search' }}
+                  onPress={ requestRecipies } />
               </View>
             </Image>
           :
           <View style={{ flex: 1 }}>
             <Spinner
               visible={this.state.loading}
-              textContent={ "Searching for tasty recipes..." }
+              textContent={ 'Searching for tasty recipes...' }
               textStyle={{ color: '#000' }}
               color="#000"
               overlayColor="#F0EFF5" />
@@ -179,19 +134,13 @@ class Options extends Component {
 
   const mapState = ({ photo }) => ({ photo })
   const mapDispatch = dispatch => ({
-    clearRecipies: () => {
-      dispatch(resetRecipies)
+    getRecipes: (tags, prefs) => {
+      dispatch(getRecipesList(tags, prefs))
     }
   })
 
   /* -----------------    NAVIGATOR    ------------------ */
 
   const OptionsScreen = connect(mapState, mapDispatch)(Options)
-
-  // const App = StackNavigator({
-  //   Home: { screen: PhotoPickerScreen },
-  //   Options: { screen: OptionsScreen },
-  //   Recipes: { screen: RecipesScreen },
-  // })
 
   export default OptionsScreen

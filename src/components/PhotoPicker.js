@@ -3,9 +3,7 @@ import { ImagePicker } from 'expo'
 import { Image, View, Text, ImageEditor, ImageStore, Linking } from 'react-native'
 import { Button, CheckBox } from 'react-native-elements'
 import { connect } from 'react-redux'
-import {
-  StackNavigator,
-} from 'react-navigation'
+import { StackNavigator } from 'react-navigation'
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import styles from '../style'
@@ -90,19 +88,19 @@ class PhotoPicker extends Component {
           ImageStore.getBase64ForTag(imageUri, (base64Data) => {
             setBase64(base64Data)
             clearRecipies()
-            setClarifaiTagsAndRecipes(base64Data)
+            setClarifaiTagsAndNavigate(base64Data)
             ImageStore.removeImageForTag(imageUri);
           }, (reason) => console.log('ERROR 3: ', reason) )
         }, (reason) => console.log('ERROR 2: ', reason) )
       }, (reason) => console.log('ERROR 1: ', reason))
     }
 
-    const setClarifaiTagsAndRecipes = (base64) => {
+    const setClarifaiTagsAndNavigate = (base64) => {
       clarifaiApp.models.predict(Clarifai.FOOD_MODEL, { base64: base64 })
       .then((res) => {
         let tags = []
         const concepts = res.outputs[0].data.concepts
-        for (let i = 0; i < 3; i++) {
+        for (let i = 0; i < 8; i++) {
           tags.push(concepts[i].name)
         }
         setTags(tags)

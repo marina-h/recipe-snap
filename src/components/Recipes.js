@@ -26,7 +26,7 @@ class Recipes extends Component {
 
   render() {
     let { photoUrl, tags } = this.props.photo
-    let { recipeList, preferences } = this.props.recipes
+    let { recipeList } = this.props.recipes
 
     const visitRecipeUrl = (url) => {
       Linking.openURL(url)
@@ -49,13 +49,6 @@ class Recipes extends Component {
 
           {/* Maybe add a separate screen to select ingredients from tags list */}
           {/* Possibly make each recipe show more info (ingredients, calories) when tapped */}
-
-          { photoUrl
-          ? <Image source={{ uri: photoUrl }} style={ styles.image } />
-          : null }
-
-          <Text>Here are the ingredients I see: { tags.join(', ') }</Text>
-          <Text>Here are your dietary preferences: { preferences.join(', ') }</Text>
 
           {
             recipeList.length

@@ -5,18 +5,21 @@ import { edamamId, edamamKey } from '../secrets'
 /* -----------------    ACTIONS     ------------------ */
 
 const SET_RECIPES = 'SET_RECIPES'
-const SET_PREFERENCES = 'SET_PREFERENCES'
+const SET_CHOSEN_TAGS = 'SET_CHOSEN_PREFERENCES'
+const SET_CHOSEN_PREFERENCES = 'SET_CHOSEN_PREFERENCES'
 
 /* ------------   ACTION CREATORS     ------------------ */
 
 const setRecipes = recipes => ({ type: SET_RECIPES, recipes })
-const setPreferences = preferences => ({ type: SET_PREFERENCES, preferences })
+const setChosenTags = tags => ({ type: SET_CHOSEN_TAGS, tags })
+const setChosenPreferences = preferences => ({ type: SET_CHOSEN_PREFERENCES, preferences })
 
 /* ------------       REDUCERS     ------------------ */
 
 const initialCategoryState = {
   recipeList: [{}],
-  preferences: []
+  chosenTags: [],
+  chosenPreferences: []
 }
 
 const reducer = (state = initialCategoryState, action) => {
@@ -27,8 +30,12 @@ const reducer = (state = initialCategoryState, action) => {
     newState.recipeList = action.recipes
     break
 
-  case SET_PREFERENCES:
-    newState.preferences = action.preferences
+  case SET_CHOSEN_TAGS:
+    newState.chosenTags = action.tags
+    break
+
+  case SET_CHOSEN_PREFERENCES:
+    newState.chosenPreferences = action.preferences
     break
 
   default:
@@ -54,7 +61,8 @@ export const getRecipesList = (tags, preferences = []) => dispatch => {
 
   console.log('edamamApiPath', edamamApiPath)
 
-  dispatch(setPreferences(preferences))
+  dispatch(setChosenTags(tags))
+  dispatch(setChosenPreferences(preferences))
 
   axios.get(edamamApiPath)
   .then(res => {
