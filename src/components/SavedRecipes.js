@@ -84,34 +84,38 @@ class SavedRecipes extends Component {
             savedRecipesList.length
             ? savedRecipesList.map((recipe, idx) => (
                 <Card key={ idx } >
-                  <CardTitle>
-                    <Text style={ styles.mainTextSmall }>{ recipe.label }</Text>
-                  </CardTitle>
-                  <CardContent>
-                    <Image source={{ uri: recipe.image }} style={ styles.image } />
-                    <Text style={ styles.mainTextSmall }>Source: { recipe.source }</Text>
-                  </CardContent>
-                    <View style={ styles.cardAction }>
-                      <Button
-                        style={ styles.savedRecipeButtons }
-                        title="Share"
-                        icon={{ name: 'share' }}
-                        backgroundColor="#009688"
-                        onPress={ () => this.shareRecipe(recipe.label, recipe.url) } />
-                      <Button
-                        style={ styles.savedRecipeButtons }
-                        title="Visit website"
-                        icon={{ name: 'open-in-browser' }}
-                        backgroundColor="#009688"
-                        onPress={ () => visitRecipeUrl(recipe.url) } />
-                      <Button
-                        style={ styles.savedRecipeButtons }
-                        title="Delete"
-                        icon={{ name: 'delete' }}
-                        backgroundColor="#009688"
-                        onPress={() => deleteFromSavedList(recipe.url) } />
-                    </View>
-                  </Card>
+                  <Image
+                    source={( require('../images/cloth.png') )}
+                    style={ styles.cardBackground } >
+                    <CardTitle>
+                      <Text style={ [styles.mainTextSmall, styles.mainFont] }>{ recipe.label }</Text>
+                    </CardTitle>
+                    <CardContent>
+                      <Image source={{ uri: recipe.image }} style={ styles.image } />
+                      <Text style={ [styles.mainTextSmall, styles.mainFont, { fontStyle: 'italic' }] }>Source: { recipe.source }</Text>
+                    </CardContent>
+                      <View style={ styles.cardAction }>
+                        <Button
+                          style={ styles.savedRecipeButtons }
+                          title="Share"
+                          icon={{ name: 'share' }}
+                          backgroundColor="#009688"
+                          onPress={ () => this.shareRecipe(recipe.label, recipe.url) } />
+                        <Button
+                          style={ styles.savedRecipeButtons }
+                          title="Visit website"
+                          icon={{ name: 'open-in-browser' }}
+                          backgroundColor="#009688"
+                          onPress={ () => visitRecipeUrl(recipe.url) } />
+                        <Button
+                          style={ styles.savedRecipeButtons }
+                          title="Delete"
+                          icon={{ name: 'delete' }}
+                          backgroundColor="#009688"
+                          onPress={() => deleteFromSavedList(recipe.url) } />
+                      </View>
+                  </Image>
+                </Card>
               ))
             : <View></View>
           }

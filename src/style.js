@@ -80,6 +80,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  cardBackground: {
+    flex: 1,
+    width: null,
+    height: null,
+    resizeMode: 'repeat'
+  },
   savedRecipeButtons: {
     height: 40,
     width: 100,
