@@ -12,6 +12,7 @@ import styles from '../style'
 import { clarifaiApp } from '../secrets'
 import { setPhotoUrl, setPhotoBase64, setPhotoTags } from '../redux/photo'
 import { resetRecipies } from '../redux/recipes'
+import OptionsScreen from './Options'
 import RecipesScreen from './Recipes'
 
 /* -----------------    COMPONENT    ------------------ */
@@ -20,10 +21,6 @@ class PhotoPicker extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      vegetarian: false,
-      vegan: false,
-      'sugar-conscious': false,
-      'peanut-free': false,
       loading: false
     }
     this.changeCheckboxState = this.changeCheckboxState.bind(this)
@@ -108,9 +105,9 @@ class PhotoPicker extends Component {
         for (let i = 0; i < 3; i++) {
           tags.push(concepts[i].name)
         }
-        setTags(tags, getPreferences())
+        setTags(tags)
         this.stopLoading()
-        navigate('Recipes')
+        navigate('Options')
       }, (error) => {
         console.log('ERROR getting clarifai tags: ', error);
       })
@@ -169,22 +166,13 @@ class PhotoPicker extends Component {
 
               {/* Add "I'm feeling lucky" option to select */}
 
-              <Text style={ [styles.mainFont, styles.mainTextSmall] }>Options: </Text>
-              <View style={ styles.checkboxRow } >
-                { createCheckbox('vegetarian') }
-                { createCheckbox('vegan') }
-              </View>
-              <View style={ styles.checkboxRow } >
-                { createCheckbox('sugar-conscious') }
-                { createCheckbox('peanut-free') }
-              </View>
             </View>
           </Image>
         :
         <View style={{ flex: 1 }}>
           <Spinner
             visible={this.state.loading}
-            textContent={ "Searching for tasty recipes..." }
+            textContent={ "Analyzing your photo..." }
             textStyle={{ color: '#000' }}
             color="#000"
             overlayColor="#F0EFF5" />
@@ -219,6 +207,7 @@ const PhotoPickerScreen = connect(mapState, mapDispatch)(PhotoPicker)
 
 const App = StackNavigator({
   Home: { screen: PhotoPickerScreen },
+  Options: { screen: OptionsScreen },
   Recipes: { screen: RecipesScreen },
 })
 

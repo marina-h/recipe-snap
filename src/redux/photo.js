@@ -55,7 +55,7 @@ export const setPhotoBase64 = (base64) => dispatch => {
 
 export const setPhotoTags = (tags, preferences) => dispatch => {
   dispatch(setTags(tags))
-  dispatch(getRecipesList(tags, preferences))
+  // dispatch(getRecipesList(tags, preferences))
 }
 
 export default reducer
