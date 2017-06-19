@@ -63,7 +63,7 @@ class Recipes extends Component {
 
     return (
       <Image
-        source={ require('../images/salad-background.jpg' )}
+        source={ require('../images/salad-background_arrows.jpg' )}
         style={ styles.backgroundImage } >
         <View style={ styles.cardView } key={ Math.random() + '' }>
           { recipeList.length
@@ -75,7 +75,7 @@ class Recipes extends Component {
               onSwipeRight={ onSwipeRight }
               onSwipeLeft={ onSwipeLeft }
               />
-            : <Text style={ styles.mainText }>Sorry, I couldn't find any recipies with those ingredients and options :(</Text>
+            : <Text style={ [styles.mainFont, styles.mainText] }>Sorry, I couldn't find any recipies with those ingredients and options :(</Text>
           }
         </View>
       </Image>

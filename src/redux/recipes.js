@@ -17,7 +17,7 @@ const setChosenPreferences = preferences => ({ type: SET_CHOSEN_PREFERENCES, pre
 /* ------------       REDUCERS     ------------------ */
 
 const initialCategoryState = {
-  recipeList: [{}],
+  recipeList: [{ image: '', label: '', source: '' }],
   chosenTags: [],
   chosenPreferences: []
 }

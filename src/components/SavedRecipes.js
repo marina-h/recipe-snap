@@ -112,7 +112,7 @@ class SavedRecipes extends Component {
                           style={ styles.savedRecipeButtons }
                           title="Delete"
                           icon={{ name: 'delete' }}
-                          backgroundColor="#009688"
+                          backgroundColor="#F44336"
                           onPress={() => deleteFromSavedList(recipe.url) } />
                       </View>
                     </View>

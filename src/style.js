@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     height: 350,
   },
   cardView: {
-    marginTop: 140,
+    marginTop: 120,
   },
   cardImage: {
     // flex: 1,
