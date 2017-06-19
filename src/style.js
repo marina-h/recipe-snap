@@ -22,11 +22,12 @@ const styles = StyleSheet.create({
   checkboxRow: {
     flexDirection: 'row'
   },
-  checkbox: {
-    // backgroundColor: "#C8E6C9"
+  spinnerText: {
+    color: '#000',
+    fontFamily: 'American Typewriter',
   },
   mainFont: {
-    // fontFamily: 'Thonburi'
+    fontFamily: 'American Typewriter',
     backgroundColor: 'rgba(0,0,0,0)',
   },
   mainText: {

@@ -118,7 +118,7 @@ class Options extends Component {
               style={ styles.backgroundImage } >
               <View style={ styles.photoPicker } >
 
-                <Text style={ [styles.mainFont, styles.mainTextSmall] }>Choose your ingredients: </Text>
+                <Text style={ [styles.mainFont, styles.mainTextSmall, { textAlign: 'center' }] }>Here are the ingredients I recognized in your photo: </Text>
                 <View style={ styles.ingredients }>
                   {
                     tags.map((tag, idx) => (

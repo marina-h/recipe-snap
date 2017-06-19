@@ -89,7 +89,7 @@ class SavedRecipes extends Component {
                     style={ styles.cardBackground } >
                     <View style={ styles.photoPicker } >
                     <CardTitle>
-                      <Text style={ [styles.mainTextSmall, styles.mainFont] }>{ recipe.label }</Text>
+                      <Text style={ [styles.mainTextSmall, styles.mainFont, { textAlign: 'center' }] }>{ recipe.label }</Text>
                     </CardTitle>
                     <CardContent>
                       <Image source={{ uri: recipe.image }} style={ styles.image } />

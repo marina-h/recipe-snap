@@ -133,51 +133,47 @@ class PhotoPicker extends Component {
     }
 
     return (
-      <View style={ styles.photoPicker } >
-        { !this.state.loading
-          ?
-          <Image
-            source={ require('../images/salad-background.jpg' )}
-            style={ styles.backgroundImage } >
-            <View style={ styles.photoPicker }>
+      <Image
+      source={ require('../images/salad-background.jpg' )}
+      style={ styles.backgroundImage } >
+        <View style={ styles.photoPicker } >
+          { !this.state.loading
+            ?
+              <View style={ styles.photoPicker }>
+                <Text style={ [styles.mainFont, styles.mainText, { textAlign: 'center' }] }>Choose a photo for Recipe Snap to analyze:</Text>
 
-              {/*{ Insert "Recipe Snap" here}*/}
+                <Button
+                  raised
+                  large
+                  title="Pick from your camera roll"
+                  backgroundColor="#009688"
+                  icon={{ name: 'photo-library' }}
+                  onPress={ pickPhoto }
+                />
 
-              <Button
-                raised
-                large
-                title="Pick a photo from your camera roll"
-                backgroundColor="#009688"
-                icon={{ name: 'photo-library' }}
-                onPress={ pickPhoto }
-              />
+                <Text style={ [styles.mainFont, styles.mainText] }>or:</Text>
 
-              <Text style={ [styles.mainFont, styles.mainText] }>Or:</Text>
-
-              <Button
-                raised
-                large
-                title="Take a photo of your food"
-                backgroundColor="#009688"
-                icon={{ name: 'add-a-photo' }}
-                onPress={ takePhoto }
-              />
-
-              {/* Add "I'm feeling lucky" option to select */}
-
-            </View>
-          </Image>
-        :
-        <View style={{ flex: 1 }}>
-          <Spinner
-            visible={this.state.loading}
-            textContent={ "Analyzing your photo..." }
-            textStyle={{ color: '#000' }}
-            color="#000"
-            overlayColor="#F0EFF5" />
+                <Button
+                  raised
+                  large
+                  title="Take a photo"
+                  backgroundColor="#009688"
+                  icon={{ name: 'add-a-photo' }}
+                  onPress={ takePhoto }
+                />
+              </View>
+          :
+          <View style={{ flex: 1 }}>
+            <Spinner
+              visible={this.state.loading}
+              textContent={ "Analyzing your photo..." }
+              textStyle={ styles.spinnerText }
+              color="#000"
+              overlayColor="#F0EFF5" />
+          </View>
+        }
         </View>
-      }
-      </View>
+      </Image>
     )
   }
 }
