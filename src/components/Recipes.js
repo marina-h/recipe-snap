@@ -68,7 +68,7 @@ class Recipes extends Component {
         <View style={ styles.cardView } key={ Math.random() + '' }>
           { recipeList.length
             ? <SwipeDeck
-              key={ recipeList }
+              key={ Math.random() + '' }
               data={ recipeList }
               renderCard={ renderCard }
               renderNoMoreCards={ renderNoMoreCards }

@@ -14,8 +14,10 @@ const styles = StyleSheet.create({
     resizeMode: 'cover'
   },
   image: {
-    width: 280,
-    height: 280
+    width: 300,
+    height: 300,
+    borderWidth: 1,
+    borderColor: 'black',
   },
   checkboxRow: {
     flexDirection: 'row'
@@ -63,10 +65,11 @@ const styles = StyleSheet.create({
     // flexDirection: 'column',
     justifyContent: 'center',
     // alignItems: 'center',
-    marginRight: 10,
-    borderRadius: 5,
-    width: 340,
-    height: 345,
+    marginRight: 40,
+    marginTop: 10,
+    borderRadius: 10,
+    width: 360,
+    height: 360,
   },
   cardTitle: {
     position: 'absolute',
