@@ -18,7 +18,21 @@ This project was bootstrapped with [Create React Native App](https://github.com/
 </p>
 
 ## How to run locally
-Clone and/or fork this repo and choose an option from below:
+1. Clone and/or fork this repo
+2. Run `yarn` or `npm install` to load dependencies
+3. Create a `src/secrets.js` file with your Edamam Recipe Search ID and Key and Clarifai API key as shown below:
+```javascript
+import Clarifai from 'clarifai'
+
+export const clarifaiApp = new Clarifai.App({
+  apiKey: 'YOUR_API_KEY' // your key must have access to the Predict scope
+})
+
+export const edamamId = 'YOUR_ID_HERE'
+export const edamamKey = 'YOUR_KEY_HERE'
+```
+
+4. Choose an option from below:
 
 `npm start` - Runs your app in development mode. You can use the Expo app on your phone to scan the QR code to run it. It will reload if you save edits to your files, and you will see build errors and logs in the terminal.
 

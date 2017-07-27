@@ -25,22 +25,6 @@ class SavedRecipes extends Component {
     title: `Saved Recipes`,
     tabBarLabel: `Saved Recipes`,
     tabBarIcon: <Icon name="list" />
-    // () => {
-    //   return (
-    //     <IconBadge
-    //       MainElement={
-    //         <Icon name="list" />
-    //       }
-    //       BadgeElement={
-    //         <Text style={ styles.badge }>{ Object.keys(this.props.saved.SavedRecipes).length }</Text>
-    //       }
-    //       IconBadgeStyle={{
-    //         width: 12,
-    //         height: 12,
-    //       }}
-    //     />
-    //   )
-    // }
   })
 
   shareRecipe(name, url) {
@@ -50,9 +34,8 @@ class SavedRecipes extends Component {
       url: url
     }, {
       dialogTitle: 'Sharing options: ',
-      // tintColor: 'green'
     })
-    .catch(err => console.log(err))
+    .catch(err => console.error('Error: ', err))
   }
 
   render() {
@@ -66,9 +49,7 @@ class SavedRecipes extends Component {
 
     const cardActionStyle = {
       cardAction: {
-        flexDirection: 'row',
-        // alignItems: 'center',
-        // justifyContent: 'center',
+        flexDirection: 'row'
       }
     }
 
@@ -77,9 +58,6 @@ class SavedRecipes extends Component {
         source={ require('../images/salad-background.jpg' )}
         style={ styles.backgroundImage } >
         <ScrollView>
-
-          {/* Maybe add a separate screen to select ingredients from tags list */}
-          {/* Possibly make each recipe show more info (ingredients, calories) when tapped */}
           {
             savedRecipesList.length
             ? savedRecipesList.map((recipe, idx) => (
