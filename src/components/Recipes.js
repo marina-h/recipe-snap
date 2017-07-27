@@ -28,7 +28,7 @@ class Recipes extends Component {
 
     const renderCard = (card) => {
       return (
-        <View key={ Math.random() + '' } style={ styles.photoPicker } >
+        <View key={ card } style={ styles.photoPicker } >
           <Card
             containerStyle={ styles.card }
             image={{ uri: card.image }}
@@ -41,17 +41,16 @@ class Recipes extends Component {
     }
 
     const onSwipeRight = (card) => {
-      console.log("Card saved: " + card.label)
       saveRecipe(card)
     }
 
     const onSwipeLeft = (card) => {
-      console.log("Card dismissed: " + card.label);
+      // dismiss card
     }
 
     const renderNoMoreCards = () => {
       return (
-        <View key={ Math.random() + '' } style={ [styles.photoPicker, { marginTop: 170 } ] } >
+        <View style={ [styles.photoPicker, { marginTop: 170 } ] } >
           <Card
             containerStyle={ styles.card }
             image={{ uri: 'https://media.giphy.com/media/lD76yTC5zxZPG/giphy.gif' }}
@@ -65,10 +64,9 @@ class Recipes extends Component {
       <Image
         source={ require('../images/salad-background_arrows.jpg' )}
         style={ styles.backgroundImage } >
-        <View style={ styles.cardView } key={ Math.random() + '' }>
+        <View style={ styles.cardView } key={ recipeList }>
           { recipeList.length
             ? <SwipeDeck
-              key={ Math.random() + '' }
               data={ recipeList }
               renderCard={ renderCard }
               renderNoMoreCards={ renderNoMoreCards }

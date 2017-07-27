@@ -3,7 +3,6 @@ import { StyleSheet } from 'react-native';
 const styles = StyleSheet.create({
   photoPicker: {
     flex: 1,
-    // backgroundColor: '#C8E6C9',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -49,10 +48,7 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap'
   },
   card: {
-    // flex: 1,
-    // flexDirection: 'column',
     justifyContent: 'center',
-    // alignItems: 'center',
     borderRadius: 10,
     marginBottom: 30,
     width: 350,
@@ -62,10 +58,7 @@ const styles = StyleSheet.create({
     marginTop: 120,
   },
   cardImage: {
-    // flex: 1,
-    // flexDirection: 'column',
     justifyContent: 'center',
-    // alignItems: 'center',
     marginRight: 40,
     marginTop: 10,
     borderRadius: 10,

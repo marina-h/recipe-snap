@@ -91,9 +91,9 @@ class PhotoPicker extends Component {
             clearRecipies()
             setClarifaiTagsAndNavigate(base64Data)
             ImageStore.removeImageForTag(imageUri);
-          }, (reason) => console.log('ERROR 3: ', reason) )
-        }, (reason) => console.log('ERROR 2: ', reason) )
-      }, (reason) => console.log('ERROR 1: ', reason))
+          }, (reason) => console.error(reason))
+        }, (reason) => console.error(reason))
+      }, (reason) => console.error(reason))
     }
 
     const setClarifaiTagsAndNavigate = (base64) => {
@@ -108,7 +108,7 @@ class PhotoPicker extends Component {
         this.stopLoading()
         navigate('Options')
       }, (error) => {
-        console.log('ERROR getting clarifai tags: ', error);
+        console.error('ERROR getting clarifai tags: ', error);
       })
     }
 
