@@ -10,7 +10,7 @@ const deleteRecipe = url => ({ type: DELETE_RECIPE, url })
 
 /* ------------       REDUCERS     ------------------ */
 
-const test = {
+const exampleSavedRecipe = {
   "uri": "http://www.edamam.com/ontologies/edamam.owl#recipe_119e834de07ea28cf4f6c287b2ed41d5",
   "label": "Potato And Cauliflower Curry",
   "image": "https://www.edamam.com/web-img/935/935af4a7ab8d9423c53c8ac80d9742b6.jpg",
@@ -623,7 +623,7 @@ const test = {
 }
 
 const initialCategoryState = {
-  savedRecipesList: [test]
+  savedRecipesList: [exampleSavedRecipe]
 }
 
 const reducer = (state = initialCategoryState, action) => {

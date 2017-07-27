@@ -19,7 +19,7 @@ This project was bootstrapped with [Create React Native App](https://github.com/
 
 ## How to run locally
 1. Clone and/or fork this repo
-2. Run `yarn` or `npm install` to load dependencies
+2. Run `npm install` to load dependencies
 3. Create a `src/secrets.js` file with your Edamam Recipe Search ID and Key and Clarifai API key as shown below:
 ```javascript
 import Clarifai from 'clarifai'
